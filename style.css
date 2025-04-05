@@ -1,0 +1,81 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+input,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1rem;
+}
+
+main {
+  max-width: 70ch;
+  margin: 0 auto;
+}
+
+form fieldset#input-field {
+  padding: 0.25rem 0.75rem;
+}
+
+form label {
+  display: block;
+}
+
+form input,
+form button[type='submit'] {
+  display: block;
+  width: 100%;
+}
+
+form #input-field label,
+form label[for='random'],
+form #number-inputs {
+  margin: 0.75rem 0;
+}
+
+form #random {
+  display: inline;
+  width: auto;
+  margin: 0;
+  vertical-align: middle;
+}
+
+form #number-inputs {
+  display: flex;
+}
+
+form #number-inputs label {
+  flex: 1;
+}
+
+form label[for='poemcount'] {
+  margin-left: 1rem;
+}
+
+form button[type='submit'] {
+  padding: 0.5rem;
+}

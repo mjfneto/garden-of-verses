@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Garden of Verses</title>
+  </head>
+  <body>
+    <div class="container">
+      <main>
+        <form>
+          <fieldset id="input-field">
+            <legend>Input fields</legend>
+
+            <label for="title">
+              Title
+              <input type="text" name="title" id="title" />
+            </label>
+
+            <label for="author">
+              Author
+              <input type="text" name="author" id="author" />
+            </label>
+
+            <label for="lines">
+              Part(s) of a poem
+              <input type="text" name="lines" id="lines" />
+            </label>
+          </fieldset>
+
+          <label for="random">
+            Random
+            <input type="checkbox" name="random" id="random" />
+          </label>
+
+          <div id="number-inputs">
+            <label for="linecount">
+              Line count
+              <input type="number" name="linecount" id="linecount" min="1" />
+            </label>
+
+            <label for="poemcount">
+              Poem count
+              <input type="number" name="poemcount" id="poemcount" min="1" />
+            </label>
+          </div>
+
+          <button type="submit">Search</button>
+        </form>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
