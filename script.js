@@ -50,10 +50,6 @@ form.addEventListener('submit', function (event) {
   fetchFromPoetryDB(URL)
 })
 
-randomCheckbox.addEventListener('change', function () {
-  inputFieldset.disabled = randomCheckbox.checked
-})
-
 function fetchFromPoetryDB(url) {
   fetch(url)
     .then(function (response) {
