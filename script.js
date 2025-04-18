@@ -1,6 +1,7 @@
 const form = document.getElementsByTagName('form')[0]
 const inputFieldset = document.getElementById('input-field')
 const randomCheckbox = document.getElementById('random')
+const lineCount = document.getElementById('linecount')
 const poemCount = document.getElementById('poemcount')
 
 const baseURL = 'https://poetrydb.org'
@@ -42,6 +43,8 @@ form.addEventListener('submit', function (event) {
     }
   }
 
+  disableForm()
+
   const URL = `${baseURL}/${inputFields.join(',')}/${searchTerms.join(';')}`
 
   fetchFromPoetryDB(URL)
@@ -54,6 +57,10 @@ randomCheckbox.addEventListener('change', function () {
 function fetchFromPoetryDB(url) {
   fetch(url)
     .then(function (response) {
+      if (!response.ok) {
+        throw new Error(`Request error: ${response.status}`)
+      }
+
       return response.json()
     })
     .then(function (data) {
@@ -62,4 +69,19 @@ function fetchFromPoetryDB(url) {
     .catch(function (error) {
       console.log(error)
     })
+    .finally(function () {
+      enableForm()
+    })
+}
+
+function disableForm() {
+  for (let input of form) {
+    input.disabled = true
+  }
+}
+
+function enableForm() {
+  for (let input of form) {
+    input.disabled = false
+  }
 }
