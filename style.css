@@ -5,6 +5,7 @@
 
 html {
   box-sizing: border-box;
+  font-size: 0.875rem;
 }
 
 *,
@@ -40,6 +41,11 @@ body {
 main {
   max-width: 70ch;
   margin: 0 auto;
+}
+
+h1 {
+  margin-bottom: 0.75rem;
+  text-align: right;
 }
 
 form fieldset#input-field {
@@ -83,4 +89,10 @@ form label[for='poemcount'] {
 
 form button[type='submit'] {
   padding: 0.5rem;
+}
+
+@media screen and (min-width: 768px) {
+  html {
+    font-size: 1rem;
+  }
 }
