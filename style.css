@@ -45,7 +45,16 @@ main #right-container ol {
 }
 
 main #right-container ol li {
-  padding: 0 0 0.5rem 1rem;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+main #right-container ol li + li {
+  margin-top: 1rem;
+}
+
+main #right-container ol li p.line-count {
+  font-size: 0.875rem;
 }
 
 h1 {

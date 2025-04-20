@@ -101,10 +101,16 @@ function handleData(data) {
 function showSearchResults(data) {
   let ol = document.createElement('ol')
 
-  for (const poem of data) {
-    let li = document.createElement('li')
-    li.textContent = `${poem.title} (${poem.author})`
-    ol.appendChild(li)
+  for (const { title, author, linecount } of data) {
+    ol.insertAdjacentHTML(
+      'beforeend',
+      `
+      <li>
+        ${title} (${author})
+        <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
+      </li>
+    `
+    )
   }
 
   rightContainer.appendChild(ol)
