@@ -25,22 +25,52 @@ button:disabled {
   cursor: not-allowed;
 }
 
-body {
-  width: 100vw;
-  height: 100vh;
-}
-
-.container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 1rem;
-}
-
 main {
-  max-width: 70ch;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100vh;
+  padding: 2rem 1rem 2rem 1rem;
+}
+
+main #right-container {
+  align-self: stretch;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  text-align: right;
+}
+
+main #right-container #search-results {
+  padding: 1rem 1rem 1rem 0;
+  overflow-y: auto;
+}
+
+main #right-container #search-results ol {
+  padding-left: 3.75rem;
+}
+
+main #right-container #search-results ol li {
+  padding-left: 1rem;
+  cursor: pointer;
+}
+
+main #right-container #search-results ol li + li {
+  margin-top: 1rem;
+}
+
+main #right-container #search-results ol li p.line-count {
+  font-size: 0.875rem;
+}
+
+main #right-container #search-controls {
+  padding: 1rem;
+}
+
+main #right-container #search-controls button.control-btn {
+  width: 2rem;
+  height: 2rem;
 }
 
 h1 {
@@ -89,6 +119,20 @@ form label[for='poemcount'] {
 
 form button[type='submit'] {
   padding: 0.5rem;
+}
+
+@media screen and (min-width: 90ch) {
+  main {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 6rem 1rem 6rem 1rem;
+  }
+
+  main #right-container {
+    flex: 0 1 70ch;
+  }
 }
 
 @media screen and (min-width: 768px) {

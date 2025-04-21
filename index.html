@@ -11,10 +11,10 @@
     <title>Garden of Verses</title>
   </head>
   <body>
-    <div class="container">
-      <main>
+    <main>
+      <div id="left-container">
         <h1>Garden of Verses</h1>
-        <form>
+        <form id="search-form">
           <fieldset id="input-field">
             <legend>Input fields</legend>
 
@@ -53,9 +53,32 @@
 
           <button type="submit">Search</button>
         </form>
-      </main>
-    </div>
+      </div>
+      <div id="right-container">
+        <div id="search-controls" role="toolbar">
+          <div id="sort-controls">
+            <button
+              disabled
+              type="button"
+              id="lines-ascending"
+              class="control-btn"
+            >
+              A
+            </button>
+            <button
+              disabled
+              type="button"
+              id="lines-descending"
+              class="control-btn"
+            >
+              Z
+            </button>
+          </div>
+        </div>
+        <div id="search-results"></div>
+      </div>
+    </main>
 
-    <script src="script.js"></script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>
