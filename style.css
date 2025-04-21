@@ -36,25 +36,41 @@ main {
 main #right-container {
   align-self: stretch;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   text-align: right;
 }
 
-main #right-container ol {
+main #right-container #search-results {
+  padding: 1rem 1rem 1rem 0;
+  overflow-y: auto;
+}
+
+main #right-container #search-results ol {
   padding-left: 3.75rem;
 }
 
-main #right-container ol li {
-  padding: 0 1rem;
+main #right-container #search-results ol li {
+  padding-left: 1rem;
   cursor: pointer;
 }
 
-main #right-container ol li + li {
+main #right-container #search-results ol li + li {
   margin-top: 1rem;
 }
 
-main #right-container ol li p.line-count {
+main #right-container #search-results ol li p.line-count {
   font-size: 0.875rem;
+}
+
+main #right-container #search-controls {
+  padding: 1rem;
+}
+
+main #right-container #search-controls button.control-btn {
+  width: 2rem;
+  height: 2rem;
 }
 
 h1 {

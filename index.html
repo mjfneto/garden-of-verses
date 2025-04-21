@@ -54,7 +54,29 @@
           <button type="submit">Search</button>
         </form>
       </div>
-      <div id="right-container"></div>
+      <div id="right-container">
+        <div id="search-controls" role="toolbar">
+          <div id="sort-controls">
+            <button
+              disabled
+              type="button"
+              id="lines-ascending"
+              class="control-btn"
+            >
+              A
+            </button>
+            <button
+              disabled
+              type="button"
+              id="lines-descending"
+              class="control-btn"
+            >
+              Z
+            </button>
+          </div>
+        </div>
+        <div id="search-results"></div>
+      </div>
     </main>
 
     <script src="script.js"></script>

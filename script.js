@@ -7,6 +7,7 @@ const poemCount = document.getElementById('poemcount')
 const baseURL = 'https://poetrydb.org'
 
 const rightContainer = document.getElementById('right-container')
+const searchResults = document.getElementById('search-results')
 
 const notFoundMsgs = [
   'The muse has whispered no verses for this query.',
@@ -88,10 +89,10 @@ function fetchFromPoetryDB(url) {
 
 function handleData(data) {
   if (data instanceof Array) {
-    clearElement(rightContainer)
+    clearElement(searchResults)
     showSearchResults(data)
   } else if (typeof data === 'object' && data !== null) {
-    clearElement(rightContainer)
+    clearElement(searchResults)
     showNotFound(data)
   } else {
     console.warn('Data in unknown format:', data)
@@ -113,7 +114,7 @@ function showSearchResults(data) {
     )
   }
 
-  rightContainer.appendChild(ol)
+  searchResults.appendChild(ol)
 }
 
 function showNotFound(data) {
@@ -129,7 +130,7 @@ function showNotFound(data) {
       p.textContent = 'Unexpected result.'
   }
 
-  rightContainer.appendChild(p)
+  searchResults.appendChild(p)
 }
 
 function clearElement(element) {
