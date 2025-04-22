@@ -25,6 +25,32 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.accordion {
+  position: relative;
+  width: 100%;
+  padding: 0.25rem;
+  border: none;
+  outline: none;
+  text-align: right;
+  cursor: pointer;
+}
+
+.accordion.active,
+.accordion:hover {
+  color: white;
+  background-color: gray;
+}
+
+.panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.2s ease;
+}
+
+.accordion.active + .panel {
+  padding: 0.25rem 0;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -53,15 +79,32 @@ main #right-container #search-results ol {
 
 main #right-container #search-results ol li {
   padding-left: 1rem;
-  cursor: pointer;
 }
 
-main #right-container #search-results ol li + li {
-  margin-top: 1rem;
+main #right-container #search-results ol > li + li {
+  margin-top: 2rem;
+}
+
+main #right-container #search-results ol li p.search-result-title {
+  font-size: 1.25rem;
+  border-bottom: 1px solid;
 }
 
 main #right-container #search-results ol li p.line-count {
   font-size: 0.875rem;
+}
+
+main #right-container #search-results ol li button.matching-lines {
+  font-size: 0.875rem;
+}
+
+main #right-container #search-results ol li .lines-peek {
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+main #right-container #search-results ol li .lines-peek span {
+  background-color: yellow;
 }
 
 main #right-container #search-controls {

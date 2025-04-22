@@ -15,3 +15,15 @@ export function enableForm(form) {
     input.disabled = false
   }
 }
+
+export function toggleAccordion() {
+  this.classList.toggle('active')
+
+  let panel = this.nextElementSibling
+
+  if (panel.style.maxHeight) {
+    panel.style.maxHeight = null
+  } else {
+    panel.style.maxHeight = panel.scrollHeight + 'px'
+  }
+}
