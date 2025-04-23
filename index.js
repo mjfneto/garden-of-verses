@@ -39,5 +39,5 @@ searchForm.addEventListener('submit', function (event) {
     }
   }
 
-  loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`)
+  loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`, formEntries)
 })

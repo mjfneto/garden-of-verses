@@ -1,11 +1,16 @@
 import { getPoems } from '../poetryDBapi.js'
-import { disableForm, enableForm, clearElement } from './general.js'
+import {
+  disableForm,
+  enableForm,
+  clearElement,
+  toggleAccordion,
+} from './general.js'
 import { randomNotFoundMsg } from '../utils.js'
 
 const searchForm = document.getElementById('search-form')
 const searchResults = document.getElementById('search-results')
 
-export async function loadPoems(params) {
+export async function loadPoems(params, formEntries) {
   try {
     disableForm(searchForm)
 
@@ -15,7 +20,7 @@ export async function loadPoems(params) {
 
     if (data instanceof Array) {
       clearElement(searchResults)
-      showSearchResults(data)
+      showSearchResults(data, formEntries)
     } else if (typeof data === 'object' && data !== null) {
       clearElement(searchResults)
       showNotFound(data)
@@ -29,19 +34,54 @@ export async function loadPoems(params) {
   }
 }
 
-function showSearchResults(data) {
+function showSearchResults(data, formEntries) {
   let ol = document.createElement('ol')
+  const linesRegExp = new RegExp(formEntries.lines, 'gi')
 
-  for (const { title, author, linecount } of data) {
-    ol.insertAdjacentHTML(
-      'beforeend',
-      `
-          <li>
-            ${title} (${author})
-            <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
-          </li>
+  for (const { title, author, linecount, lines } of data) {
+    if (formEntries.lines) {
+      const matches = lines
+        .map((line, index) => `(${index + 1}) ${line}`)
+        .filter(function (line) {
+          return linesRegExp.test(line)
+        })
+        .map(function (line) {
+          return `<li>${line.replaceAll(
+            linesRegExp,
+            (line) => `<span>${line}</span>`
+          )}</li>`
+        })
+        .join('')
+
+      ol.insertAdjacentHTML(
+        'beforeend',
         `
-    )
+            <li>
+              <p class="search-result-title">${title}</p>
+              <p class="search-result-author">${author}</p>
+              <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
+              <button type="button" class="accordion matching-lines">Matching lines</button>
+              <ul class="panel lines-peek">${matches}</ul>
+            </li>
+          `
+      )
+
+      // Add "click" event listener to the button with class accordion of the last (current) li
+      ol.lastElementChild
+        .querySelector('.accordion')
+        .addEventListener('click', toggleAccordion)
+    } else {
+      ol.insertAdjacentHTML(
+        'beforeend',
+        `
+            <li>
+              <p class="search-result-title">${title}</p>
+              <p class="search-result-author">${author}</p>
+              <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
+            </li>
+          `
+      )
+    }
   }
 
   searchResults.appendChild(ol)
