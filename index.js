@@ -1,18 +1,25 @@
-import { loadPoems } from './src/ui/poemsManager.js'
+import { loadPoems, updatePoems } from './src/ui/poemsManager.js'
 
 const searchForm = document.getElementById('search-form')
+
+const listControlsForm = document.getElementById('list-controls-form')
+
+const listControlsFormData = new FormData(listControlsForm)
+export let listControlsFormEntries = Object.fromEntries(
+  listControlsFormData.entries()
+)
 
 export let formEntries = {}
 
 searchForm.addEventListener('submit', function (event) {
   event.preventDefault()
 
-  const formData = new FormData(searchForm)
-  const entries = formData.entries()
+  const searchFormData = new FormData(searchForm)
+  const searchFormEntries = searchFormData.entries()
   let inputFields = []
   let searchTerms = []
 
-  for (const [inputField, searchTerm] of entries) {
+  for (const [inputField, searchTerm] of searchFormEntries) {
     formEntries[inputField] = searchTerm
   }
 
@@ -41,4 +48,10 @@ searchForm.addEventListener('submit', function (event) {
   }
 
   loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`)
+})
+
+listControlsForm.addEventListener('change', function () {
+  const listControlsFormData = new FormData(listControlsForm)
+  listControlsFormEntries = Object.fromEntries(listControlsFormData.entries())
+  updatePoems()
 })

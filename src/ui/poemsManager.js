@@ -1,4 +1,4 @@
-import { formEntries } from '../../index.js'
+import { formEntries, listControlsFormEntries } from '../../index.js'
 import { getPoems } from '../poetryDBapi.js'
 import {
   disableForm,
@@ -11,6 +11,10 @@ import { randomNotFoundMsg } from '../utils.js'
 const searchForm = document.getElementById('search-form')
 const searchResults = document.getElementById('search-results')
 
+const listControlsForm = document.getElementById('list-controls-form')
+
+let poems = []
+
 export async function loadPoems(params) {
   try {
     disableForm(searchForm)
@@ -20,13 +24,20 @@ export async function loadPoems(params) {
     console.log(data)
 
     if (data instanceof Array) {
+      poems = data
       clearElement(searchResults)
-      showSearchResults(data)
+      sortPoems()
+      showSearchResults()
+      enableForm(listControlsForm)
     } else if (typeof data === 'object' && data !== null) {
+      poems = []
       clearElement(searchResults)
       showNotFound(data)
+      disableForm(listControlsForm)
     } else {
+      poems = []
       console.warn('Data in unknown format:', data)
+      disableForm(listControlsForm)
     }
 
     enableForm(searchForm)
@@ -35,11 +46,11 @@ export async function loadPoems(params) {
   }
 }
 
-function showSearchResults(data) {
+function showSearchResults() {
   let ol = document.createElement('ol')
   const linesRegExp = new RegExp(formEntries.lines, 'gi')
 
-  for (const { title, author, linecount, lines } of data) {
+  for (const { title, author, linecount, lines } of poems) {
     if (formEntries.lines) {
       const matches = lines
         .map((line, index) => `(${index + 1}) ${line}`)
@@ -101,4 +112,33 @@ function showNotFound(data) {
   }
 
   searchResults.appendChild(p)
+}
+
+function sortPoems() {
+  const sortCriteria = listControlsFormEntries['sort-criteria']
+  const sortDirection = listControlsFormEntries['sort-direction']
+
+  poems.sort(function (a, b) {
+    if (sortCriteria === 'title' || sortCriteria === 'author') {
+      const stringA = a[sortCriteria]
+      const stringB = b[sortCriteria]
+
+      return sortDirection === 'asc'
+        ? stringA.localeCompare(stringB)
+        : stringB.localeCompare(stringA)
+    }
+
+    if (sortCriteria === 'linecount') {
+      const x = Number(a[sortCriteria])
+      const y = Number(b[sortCriteria])
+
+      return sortDirection === 'asc' ? x - y : y - x
+    }
+  })
+}
+
+export function updatePoems() {
+  sortPoems()
+  clearElement(searchResults)
+  showSearchResults()
 }
