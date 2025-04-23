@@ -2,12 +2,13 @@ import { loadPoems } from './src/ui/poemsManager.js'
 
 const searchForm = document.getElementById('search-form')
 
+export let formEntries = {}
+
 searchForm.addEventListener('submit', function (event) {
   event.preventDefault()
 
   const formData = new FormData(searchForm)
   const entries = formData.entries()
-  const formEntries = {}
   let inputFields = []
   let searchTerms = []
 
@@ -39,5 +40,5 @@ searchForm.addEventListener('submit', function (event) {
     }
   }
 
-  loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`, formEntries)
+  loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`)
 })

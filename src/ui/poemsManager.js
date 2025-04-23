@@ -1,3 +1,4 @@
+import { formEntries } from '../../index.js'
 import { getPoems } from '../poetryDBapi.js'
 import {
   disableForm,
@@ -10,7 +11,7 @@ import { randomNotFoundMsg } from '../utils.js'
 const searchForm = document.getElementById('search-form')
 const searchResults = document.getElementById('search-results')
 
-export async function loadPoems(params, formEntries) {
+export async function loadPoems(params) {
   try {
     disableForm(searchForm)
 
@@ -20,7 +21,7 @@ export async function loadPoems(params, formEntries) {
 
     if (data instanceof Array) {
       clearElement(searchResults)
-      showSearchResults(data, formEntries)
+      showSearchResults(data)
     } else if (typeof data === 'object' && data !== null) {
       clearElement(searchResults)
       showNotFound(data)
@@ -34,7 +35,7 @@ export async function loadPoems(params, formEntries) {
   }
 }
 
-function showSearchResults(data, formEntries) {
+function showSearchResults(data) {
   let ol = document.createElement('ol')
   const linesRegExp = new RegExp(formEntries.lines, 'gi')
 
