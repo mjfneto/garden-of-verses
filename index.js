@@ -9,7 +9,7 @@ export let listControlsFormEntries = Object.fromEntries(
   listControlsFormData.entries()
 )
 
-export let formEntries = {}
+export let searchFormEntries = {}
 
 searchForm.addEventListener('submit', function (event) {
   event.preventDefault()
@@ -20,24 +20,24 @@ searchForm.addEventListener('submit', function (event) {
   let searchTerms = []
 
   for (const [inputField, searchTerm] of searchFormEntries) {
-    formEntries[inputField] = searchTerm
+    searchFormEntries[inputField] = searchTerm
   }
 
-  if (Object.values(formEntries).every((value) => !value)) {
+  if (Object.values(searchFormEntries).every((value) => !value)) {
     alert('Kindly fill out at least one field before you submit the form.')
     return
   }
 
-  for (const [inputField, searchTerm] of Object.entries(formEntries)) {
-    if (formEntries.random && inputField === 'poemcount') {
+  for (const [inputField, searchTerm] of Object.entries(searchFormEntries)) {
+    if (searchFormEntries.random && inputField === 'poemcount') {
       continue
     }
 
     if (searchTerm) {
       inputFields.push(inputField)
       if (inputField === 'random') {
-        if (formEntries.poemcount) {
-          searchTerms.push(formEntries.poemcount)
+        if (searchFormEntries.poemcount) {
+          searchTerms.push(searchFormEntries.poemcount)
         } else {
           searchTerms.push('1')
         }

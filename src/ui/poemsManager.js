@@ -1,4 +1,4 @@
-import { formEntries, listControlsFormEntries } from '../../index.js'
+import { searchFormEntries, listControlsFormEntries } from '../../index.js'
 import { getPoems } from '../poetryDBapi.js'
 import {
   disableForm,
@@ -48,10 +48,10 @@ export async function loadPoems(params) {
 
 function showSearchResults() {
   let ol = document.createElement('ol')
-  const linesRegExp = new RegExp(formEntries.lines, 'gi')
+  const linesRegExp = new RegExp(searchFormEntries.lines, 'gi')
 
   for (const { title, author, linecount, lines } of poems) {
-    if (formEntries.lines) {
+    if (searchFormEntries.lines) {
       const matches = lines
         .map((line, index) => `(${index + 1}) ${line}`)
         .filter(function (line) {
