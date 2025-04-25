@@ -122,23 +122,31 @@ function sortPoems() {
   const sortCriteria = listControlsFormEntries['sort-criteria']
   const sortDirection = listControlsFormEntries['sort-direction']
 
-  poemsClone.sort(function (a, b) {
-    if (sortCriteria === 'title' || sortCriteria === 'author') {
-      const stringA = a[sortCriteria]
-      const stringB = b[sortCriteria]
+  if (sortDirection === 'def') {
+    poemsClone = cloneViaJson(poems)
+    return
+  }
 
-      return sortDirection === 'asc'
-        ? stringA.localeCompare(stringB)
-        : stringB.localeCompare(stringA)
-    }
+  if (sortDirection === 'asc' || sortDirection === 'desc') {
+    poemsClone.sort(function (a, b) {
+      if (sortCriteria === 'title' || sortCriteria === 'author') {
+        const stringA = a[sortCriteria]
+        const stringB = b[sortCriteria]
 
-    if (sortCriteria === 'linecount') {
-      const x = Number(a[sortCriteria])
-      const y = Number(b[sortCriteria])
+        return sortDirection === 'asc'
+          ? stringA.localeCompare(stringB)
+          : stringB.localeCompare(stringA)
+      }
 
-      return sortDirection === 'asc' ? x - y : y - x
-    }
-  })
+      if (sortCriteria === 'linecount') {
+        const x = Number(a[sortCriteria])
+        const y = Number(b[sortCriteria])
+
+        return sortDirection === 'asc' ? x - y : y - x
+      }
+    })
+    return
+  }
 }
 
 export function updatePoems() {

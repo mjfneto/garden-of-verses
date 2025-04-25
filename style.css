@@ -120,6 +120,7 @@ main #right-container #list-controls-form #order-by {
 main #right-container #list-controls-form #order-by #sort-direction {
   flex: auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: end;
   gap: 2rem;
   padding: 0 0.5rem 0.5rem 0.5rem;

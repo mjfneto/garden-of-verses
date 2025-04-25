@@ -70,9 +70,19 @@
             <fieldset id="sort-direction">
               <legend class="sr-only">Sort direction:</legend>
               <div>
-                <label for="sort-asc">(A-Z, 0-9)</label>
+                <label for="sort-def">Default</label>
                 <input
                   checked
+                  type="radio"
+                  id="sort-def"
+                  name="sort-direction"
+                  value="def"
+                />
+              </div>
+
+              <div>
+                <label for="sort-asc">(A-Z, 0-9)</label>
+                <input
                   type="radio"
                   id="sort-asc"
                   name="sort-direction"
