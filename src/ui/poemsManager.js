@@ -6,7 +6,7 @@ import {
   clearElement,
   toggleAccordion,
 } from './general.js'
-import { randomNotFoundMsg } from '../utils.js'
+import { cloneViaJson, randomNotFoundMsg } from '../utils.js'
 
 const searchForm = document.getElementById('search-form')
 const searchResults = document.getElementById('search-results')
@@ -14,6 +14,7 @@ const searchResults = document.getElementById('search-results')
 const listControlsForm = document.getElementById('list-controls-form')
 
 let poems = []
+let poemsClone = []
 
 export async function loadPoems(params) {
   try {
@@ -25,17 +26,20 @@ export async function loadPoems(params) {
 
     if (data instanceof Array) {
       poems = data
+      poemsClone = cloneViaJson(poems)
       clearElement(searchResults)
       sortPoems()
       showSearchResults()
       enableForm(listControlsForm)
     } else if (typeof data === 'object' && data !== null) {
       poems = []
+      poemsClone = []
       clearElement(searchResults)
       showNotFound(data)
       disableForm(listControlsForm)
     } else {
       poems = []
+      poemsClone = []
       console.warn('Data in unknown format:', data)
       disableForm(listControlsForm)
     }
@@ -50,7 +54,7 @@ function showSearchResults() {
   let ol = document.createElement('ol')
   const linesRegExp = new RegExp(searchFormEntries.lines, 'gi')
 
-  for (const { title, author, linecount, lines } of poems) {
+  for (const { title, author, linecount, lines } of poemsClone) {
     if (searchFormEntries.lines) {
       const matches = lines
         .map((line, index) => `(${index + 1}) ${line}`)
@@ -118,7 +122,7 @@ function sortPoems() {
   const sortCriteria = listControlsFormEntries['sort-criteria']
   const sortDirection = listControlsFormEntries['sort-direction']
 
-  poems.sort(function (a, b) {
+  poemsClone.sort(function (a, b) {
     if (sortCriteria === 'title' || sortCriteria === 'author') {
       const stringA = a[sortCriteria]
       const stringB = b[sortCriteria]
