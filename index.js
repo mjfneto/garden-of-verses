@@ -15,13 +15,9 @@ searchForm.addEventListener('submit', function (event) {
   event.preventDefault()
 
   const searchFormData = new FormData(searchForm)
-  const searchFormEntries = searchFormData.entries()
+  searchFormEntries = Object.fromEntries(searchFormData.entries())
   let inputFields = []
   let searchTerms = []
-
-  for (const [inputField, searchTerm] of searchFormEntries) {
-    searchFormEntries[inputField] = searchTerm
-  }
 
   if (Object.values(searchFormEntries).every((value) => !value)) {
     alert('Kindly fill out at least one field before you submit the form.')
