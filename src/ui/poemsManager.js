@@ -119,8 +119,7 @@ function showNotFound(data) {
 }
 
 function sortPoems() {
-  const sortCriteria = listControlsFormEntries['sort-criteria']
-  const sortDirection = listControlsFormEntries['sort-direction']
+  const { sortCriteria, sortDirection } = listControlsFormEntries
 
   if (sortDirection === 'def') {
     poemsClone = cloneViaJson(poems)
