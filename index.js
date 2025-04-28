@@ -1,4 +1,8 @@
-import { loadPoems, updatePoems } from './src/ui/poemsManager.js'
+import {
+  handleCheckboxes,
+  loadPoems,
+  updatePoems,
+} from './src/ui/poemsManager.js'
 
 const searchForm = document.getElementById('search-form')
 
@@ -41,6 +45,7 @@ searchForm.addEventListener('submit', function (event) {
   loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`)
 })
 
-listControlsForm.addEventListener('change', function () {
+listControlsForm.addEventListener('change', function (event) {
+  handleCheckboxes(event)
   updatePoems()
 })

@@ -5,6 +5,7 @@ import {
   enableForm,
   clearElement,
   toggleAccordion,
+  clearAfter,
 } from './general.js'
 import { cloneViaJson, randomNotFoundMsg } from '../utils.js'
 
@@ -12,6 +13,10 @@ const searchForm = document.getElementById('search-form')
 const searchResults = document.getElementById('search-results')
 
 const listControlsForm = document.getElementById('list-controls-form')
+const authorFilterOptions = document.getElementById('author-filter-options')
+const firstAuthorCheckboxContainer = document.querySelector(
+  '.author-checkbox-container'
+)
 
 let poems = []
 let poemsClone = []
@@ -27,6 +32,8 @@ export async function loadPoems(params) {
     if (data instanceof Array) {
       poems = data
       poemsClone = cloneViaJson(poems)
+      clearAfter(firstAuthorCheckboxContainer)
+      insertAuthorCheckboxes()
       clearElement(searchResults)
       sortPoems()
       showSearchResults()
@@ -154,4 +161,42 @@ export function updatePoems() {
   sortPoems()
   clearElement(searchResults)
   showSearchResults()
+}
+
+function insertAuthorCheckboxes() {
+  const authors = poemsClone
+    .map(({ author }) => author)
+    .filter((author, index, array) => array.indexOf(author) === index)
+
+  let checkboxes = authors
+    .map(function (author, index) {
+      return `
+          <div class="author-checkbox-container">
+            <label for="author-name-${index}">${author}</label>
+            <input checked type="checkbox" id="author-name-${index}" class="author-checkbox" name="authorFilter" value="${author}" />
+          </div>
+        `
+    })
+    .join('')
+
+  authorFilterOptions.insertAdjacentHTML('beforeend', checkboxes)
+}
+
+export function handleCheckboxes(event) {
+  const allAuthorsCheckbox = document.getElementById('all-author-names')
+  const authorCheckboxes = Array.from(
+    document.querySelectorAll('.author-checkbox')
+  )
+
+  if (event.target.name === 'authorFilter') {
+    if (event.target === allAuthorsCheckbox) {
+      listControlsForm
+        .querySelectorAll('[name="authorFilter"]')
+        .forEach((checkbox) => (checkbox.checked = allAuthorsCheckbox.checked))
+    } else {
+      allAuthorsCheckbox.checked = authorCheckboxes.every(
+        (checkbox) => checkbox.checked
+      )
+    }
+  }
 }
