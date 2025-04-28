@@ -108,6 +108,10 @@ main #right-container #search-results ol li .lines-peek span {
   background-color: yellow;
 }
 
+main #right-container #list-controls-form {
+  min-width: 0;
+}
+
 main #right-container #list-controls-form #order-by {
   display: flex;
   flex-wrap: wrap;
@@ -135,6 +139,43 @@ main
   input[type='radio'] {
   display: inline;
   width: auto;
+}
+
+main #right-container #list-controls-form #filter-by-author {
+  min-width: 0;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+}
+
+main
+  #right-container
+  #list-controls-form
+  #filter-by-author
+  #author-filter-options {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+}
+
+main
+  #right-container
+  #list-controls-form
+  #filter-by-author
+  #author-filter-options
+  .author-checkbox {
+  flex-shrink: 0;
+}
+
+main
+  #right-container
+  #list-controls-form
+  #filter-by-author
+  #author-filter-options
+  .author-checkbox
+  > * {
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
 }
 
 h1 {
