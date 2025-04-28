@@ -1,4 +1,4 @@
-import { searchFormEntries, listControlsFormEntries } from '../../index.js'
+import { searchFormEntries } from '../../index.js'
 import { getPoems } from '../poetryDBapi.js'
 import {
   disableForm,
@@ -119,7 +119,9 @@ function showNotFound(data) {
 }
 
 function sortPoems() {
-  const { sortCriteria, sortDirection } = listControlsFormEntries
+  const listControlsFormData = new FormData(listControlsForm)
+  const sortCriteria = listControlsFormData.get('sortCriteria')
+  const sortDirection = listControlsFormData.get('sortDirection')
 
   if (sortDirection === 'def') {
     poemsClone = cloneViaJson(poems)

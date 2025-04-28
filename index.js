@@ -4,11 +4,6 @@ const searchForm = document.getElementById('search-form')
 
 const listControlsForm = document.getElementById('list-controls-form')
 
-const listControlsFormData = new FormData(listControlsForm)
-export let listControlsFormEntries = Object.fromEntries(
-  listControlsFormData.entries()
-)
-
 export let searchFormEntries = {}
 
 searchForm.addEventListener('submit', function (event) {
@@ -47,7 +42,5 @@ searchForm.addEventListener('submit', function (event) {
 })
 
 listControlsForm.addEventListener('change', function () {
-  const listControlsFormData = new FormData(listControlsForm)
-  listControlsFormEntries = Object.fromEntries(listControlsFormData.entries())
   updatePoems()
 })
