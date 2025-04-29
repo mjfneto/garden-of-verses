@@ -1,9 +1,9 @@
-import { SELECTORS } from './src/ui/domSelectors.js'
 import {
+  SELECTORS,
   handleCheckboxes,
   loadPoems,
   updatePoems,
-} from './src/ui/poemsManager.js'
+} from './src/ui/poemsUI.js'
 import { buildSearchParams } from './src/utils/searchHelpers.js'
 
 const searchForm = document.querySelector(SELECTORS.searchForm)
