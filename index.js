@@ -1,12 +1,13 @@
+import { SELECTORS } from './src/ui/domSelectors.js'
 import {
   handleCheckboxes,
   loadPoems,
   updatePoems,
 } from './src/ui/poemsManager.js'
 
-const searchForm = document.getElementById('search-form')
+const searchForm = document.querySelector(SELECTORS.searchForm)
 
-const listControlsForm = document.getElementById('list-controls-form')
+const listControlsForm = document.querySelector(SELECTORS.listControls)
 
 export let searchFormEntries = {}
 

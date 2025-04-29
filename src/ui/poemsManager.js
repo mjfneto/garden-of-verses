@@ -8,16 +8,16 @@ import {
   clearAfter,
 } from './general.js'
 import { cloneViaJson, randomNotFoundMsg } from '../utils.js'
+import { SELECTORS } from './domSelectors.js'
 
-const searchForm = document.getElementById('search-form')
-const searchResults = document.getElementById('search-results')
-
-const listControlsForm = document.getElementById('list-controls-form')
-const authorFilterOptions = document.getElementById('author-filter-options')
+const searchForm = document.querySelector(SELECTORS.searchForm)
+const searchResults = document.querySelector(SELECTORS.searchResults)
+const listControlsForm = document.querySelector(SELECTORS.listControls)
+const authorFilterOptions = document.querySelector(SELECTORS.authorOptions)
+const allAuthorNames = document.querySelector(SELECTORS.allAuthors)
 const firstAuthorCheckboxContainer = document.querySelector(
-  '.author-checkbox-container'
+  SELECTORS.authorCheckboxContainers
 )
-const allAuthorNames = document.getElementById('all-author-names')
 
 let poems = []
 let poemsClone = []
@@ -194,18 +194,17 @@ function insertAuthorCheckboxes() {
 }
 
 export function handleCheckboxes(event) {
-  const allAuthorsCheckbox = document.getElementById('all-author-names')
   const authorCheckboxes = Array.from(
     document.querySelectorAll('.author-checkbox')
   )
 
   if (event.target.name === 'authorFilter') {
-    if (event.target === allAuthorsCheckbox) {
+    if (event.target === allAuthorNames) {
       listControlsForm
         .querySelectorAll('[name="authorFilter"]')
-        .forEach((checkbox) => (checkbox.checked = allAuthorsCheckbox.checked))
+        .forEach((checkbox) => (checkbox.checked = allAuthorNames.checked))
     } else {
-      allAuthorsCheckbox.checked = authorCheckboxes.every(
+      allAuthorNames.checked = authorCheckboxes.every(
         (checkbox) => checkbox.checked
       )
     }
