@@ -7,7 +7,7 @@ import {
   toggleAccordion,
   clearAfter,
 } from './general.js'
-import { cloneViaJson, randomNotFoundMsg } from '../utils.js'
+import { cloneViaJson, randomNotFoundMsg } from '../utils/utils.js'
 import { SELECTORS } from './domSelectors.js'
 
 const searchForm = document.querySelector(SELECTORS.searchForm)

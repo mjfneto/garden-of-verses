@@ -4,6 +4,7 @@ import {
   loadPoems,
   updatePoems,
 } from './src/ui/poemsManager.js'
+import { buildSearchParams } from './src/utils/searchHelpers.js'
 
 const searchForm = document.querySelector(SELECTORS.searchForm)
 const listControlsForm = document.querySelector(SELECTORS.listControls)
@@ -28,25 +29,6 @@ function onSearchSubmit(event) {
 function onListControlsChange(event) {
   handleCheckboxes(event)
   updatePoems()
-}
-
-export function buildSearchParams(entries) {
-  let inputFields = []
-  let searchTerms = []
-
-  for (const [field, term] of Object.entries(entries)) {
-    if (entries.random && field === 'poemcount') continue
-    if (!term) continue
-
-    inputFields.push(field)
-    if (field === 'random') {
-      searchTerms.push(entries.poemcount || '1')
-    } else {
-      searchTerms.push(term)
-    }
-  }
-
-  return { inputFields, searchTerms }
 }
 
 searchForm.addEventListener('submit', onSearchSubmit)
