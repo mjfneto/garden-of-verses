@@ -17,6 +17,7 @@ const authorFilterOptions = document.getElementById('author-filter-options')
 const firstAuthorCheckboxContainer = document.querySelector(
   '.author-checkbox-container'
 )
+const allAuthorNames = document.getElementById('all-author-names')
 
 let poems = []
 let poemsClone = []
@@ -29,9 +30,12 @@ export async function loadPoems(params) {
 
     console.log(data)
 
+    allAuthorNames.checked = true
+
     if (data instanceof Array) {
       poems = data
       poemsClone = cloneViaJson(poems)
+
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
       clearElement(searchResults)
@@ -41,6 +45,7 @@ export async function loadPoems(params) {
     } else if (typeof data === 'object' && data !== null) {
       poems = []
       poemsClone = []
+      clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
       showNotFound(data)
       disableForm(listControlsForm)
@@ -125,15 +130,21 @@ function showNotFound(data) {
   searchResults.appendChild(p)
 }
 
+function filterPoems() {
+  const listControlsFormData = new FormData(listControlsForm)
+  const authorFilters = listControlsFormData
+    .getAll('authorFilter')
+    .filter((author) => author !== 'All')
+
+  poemsClone = cloneViaJson(poems).filter(({ author }) =>
+    authorFilters.includes(author)
+  )
+}
+
 function sortPoems() {
   const listControlsFormData = new FormData(listControlsForm)
   const sortCriteria = listControlsFormData.get('sortCriteria')
   const sortDirection = listControlsFormData.get('sortDirection')
-
-  if (sortDirection === 'def') {
-    poemsClone = cloneViaJson(poems)
-    return
-  }
 
   if (sortDirection === 'asc' || sortDirection === 'desc') {
     poemsClone.sort(function (a, b) {
@@ -153,11 +164,11 @@ function sortPoems() {
         return sortDirection === 'asc' ? x - y : y - x
       }
     })
-    return
   }
 }
 
 export function updatePoems() {
+  filterPoems()
   sortPoems()
   clearElement(searchResults)
   showSearchResults()
