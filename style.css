@@ -69,6 +69,14 @@ main #right-container {
   text-align: right;
 }
 
+main #right-container #result-count {
+  text-align: left;
+}
+
+main #right-container #result-count #result-number {
+  font-weight: bolder;
+}
+
 main #right-container #search-results {
   padding: 1rem 1rem 1rem 0;
   overflow-y: auto;
@@ -237,7 +245,6 @@ form button[type='submit'] {
 
   main #right-container {
     flex: 0 1 70ch;
-    gap: 2rem;
   }
 }
 

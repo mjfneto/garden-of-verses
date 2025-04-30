@@ -12,6 +12,7 @@ import {
   searchForm,
   searchResults,
   listControlsForm,
+  resultCount,
   authorFilterOptions,
   allAuthorNames,
   firstAuthorCheckboxContainer,
@@ -37,6 +38,7 @@ export async function loadPoems(params) {
       poems = data
       poemsClone = cloneViaJson(poems)
 
+      showResultCount()
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
       clearElement(searchResults)
@@ -61,6 +63,13 @@ export async function loadPoems(params) {
   } catch (error) {
     console.log(error)
   }
+}
+
+function showResultCount() {
+  resultCount.innerHTML = `
+    <span id="result-number">${poemsClone.length}</span> poem${
+    poemsClone.length > 1 ? 's' : ''
+  } found. Take a breath and read.`
 }
 
 function showSearchResults() {
@@ -118,17 +127,17 @@ function showSearchResults() {
 
 function showNotFound(data) {
   const { status } = data
-  let p = document.createElement('p')
+  let html = ''
 
   switch (status) {
     case 404:
-      p.textContent = randomNotFoundMsg()
+      html = randomNotFoundMsg()
       break
     default:
-      p.textContent = 'Unexpected result.'
+      html = 'Unexpected result.'
   }
 
-  searchResults.appendChild(p)
+  resultCount.innerHTML = html
 }
 
 function filterPoems(formData = new FormData(listControlsForm)) {

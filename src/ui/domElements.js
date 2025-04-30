@@ -10,6 +10,7 @@ import { SELECTORS } from './domSelectors.js'
 export const searchForm = document.querySelector(SELECTORS.searchForm)
 export const searchResults = document.querySelector(SELECTORS.searchResults)
 export const listControlsForm = document.querySelector(SELECTORS.listControls)
+export const resultCount = document.querySelector(SELECTORS.resultCount)
 export const authorFilterOptions = document.querySelector(
   SELECTORS.authorOptions
 )
