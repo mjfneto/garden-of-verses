@@ -54,7 +54,7 @@ button:disabled {
 main {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   height: 100vh;
   padding: 2rem 1rem 2rem 1rem;
 }
@@ -64,6 +64,7 @@ main #right-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   overflow-y: auto;
   text-align: right;
 }
@@ -107,13 +108,74 @@ main #right-container #search-results ol li .lines-peek span {
   background-color: yellow;
 }
 
-main #right-container #search-controls {
-  padding: 1rem;
+main #right-container #list-controls-form {
+  min-width: 0;
 }
 
-main #right-container #search-controls button.control-btn {
-  width: 2rem;
-  height: 2rem;
+main #right-container #list-controls-form #order-by {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 1rem;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  text-align: left;
+}
+
+main #right-container #list-controls-form #order-by #sort-direction {
+  flex: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 2rem;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+}
+
+main #right-container #list-controls-form #order-by #sort-direction label,
+main
+  #right-container
+  #list-controls-form
+  #order-by
+  #sort-direction
+  input[type='radio'] {
+  display: inline;
+  width: auto;
+}
+
+main #right-container #list-controls-form #filter-by-author {
+  min-width: 0;
+  padding: 0 0.5rem 0.5rem 0.5rem;
+}
+
+main
+  #right-container
+  #list-controls-form
+  #filter-by-author
+  #author-filter-options {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+}
+
+main
+  #right-container
+  #list-controls-form
+  #filter-by-author
+  #author-filter-options
+  .author-checkbox-container {
+  flex-shrink: 0;
+}
+
+main
+  #right-container
+  #list-controls-form
+  #filter-by-author
+  #author-filter-options
+  .author-checkbox-container
+  > * {
+  display: inline-block;
+  width: auto;
+  vertical-align: middle;
 }
 
 h1 {
@@ -169,12 +231,13 @@ form button[type='submit'] {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    gap: 2rem;
     padding: 6rem 1rem 6rem 1rem;
   }
 
   main #right-container {
     flex: 0 1 70ch;
+    gap: 2rem;
   }
 }
 

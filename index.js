@@ -1,43 +1,35 @@
-import { loadPoems } from './src/ui/poemsManager.js'
+import {
+  SELECTORS,
+  handleCheckboxes,
+  loadPoems,
+  updatePoems,
+} from './src/ui/poemsUI.js'
+import { buildSearchParams } from './src/utils/searchHelpers.js'
 
-const searchForm = document.getElementById('search-form')
+const searchForm = document.querySelector(SELECTORS.searchForm)
+const listControlsForm = document.querySelector(SELECTORS.listControls)
 
-searchForm.addEventListener('submit', function (event) {
+export let searchFormEntries = {}
+
+function onSearchSubmit(event) {
   event.preventDefault()
 
-  const formData = new FormData(searchForm)
-  const entries = formData.entries()
-  const formEntries = {}
-  let inputFields = []
-  let searchTerms = []
+  const searchFormData = new FormData(searchForm)
+  searchFormEntries = Object.fromEntries(searchFormData.entries())
 
-  for (const [inputField, searchTerm] of entries) {
-    formEntries[inputField] = searchTerm
-  }
-
-  if (Object.values(formEntries).every((value) => !value)) {
+  if (Object.values(searchFormEntries).every((val) => !val)) {
     alert('Kindly fill out at least one field before you submit the form.')
     return
   }
 
-  for (const [inputField, searchTerm] of Object.entries(formEntries)) {
-    if (formEntries.random && inputField === 'poemcount') {
-      continue
-    }
+  const { inputFields, searchTerms } = buildSearchParams(searchFormEntries)
+  loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`)
+}
 
-    if (searchTerm) {
-      inputFields.push(inputField)
-      if (inputField === 'random') {
-        if (formEntries.poemcount) {
-          searchTerms.push(formEntries.poemcount)
-        } else {
-          searchTerms.push('1')
-        }
-      } else {
-        searchTerms.push(searchTerm)
-      }
-    }
-  }
+function onListControlsChange(event) {
+  handleCheckboxes(event)
+  updatePoems()
+}
 
-  loadPoems(`${inputFields.join(',')}/${searchTerms.join(';')}`, formEntries)
-})
+searchForm.addEventListener('submit', onSearchSubmit)
+listControlsForm.addEventListener('change', onListControlsChange)

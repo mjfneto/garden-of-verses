@@ -4,6 +4,12 @@ export function clearElement(element) {
   }
 }
 
+export function clearAfter(element) {
+  while (element.nextElementSibling) {
+    element.nextElementSibling.remove()
+  }
+}
+
 export function disableForm(form) {
   for (let input of form) {
     input.disabled = true

@@ -55,26 +55,68 @@
         </form>
       </div>
       <div id="right-container">
-        <div id="search-controls" role="toolbar">
-          <div id="sort-controls">
-            <button
-              disabled
-              type="button"
-              id="lines-ascending"
-              class="control-btn"
-            >
-              A
-            </button>
-            <button
-              disabled
-              type="button"
-              id="lines-descending"
-              class="control-btn"
-            >
-              Z
-            </button>
-          </div>
-        </div>
+        <form id="list-controls-form">
+          <fieldset id="order-by">
+            <legend>Order by</legend>
+            <div>
+              <label for="sort-criteria">Criterion:</label>
+              <select id="sort-criteria" name="sortCriteria">
+                <option value="title">Title</option>
+                <option value="author">Author</option>
+                <option value="linecount">Number of lines</option>
+              </select>
+            </div>
+
+            <fieldset id="sort-direction">
+              <legend>Sort direction:</legend>
+              <div>
+                <label for="sort-def">Default</label>
+                <input
+                  checked
+                  type="radio"
+                  id="sort-def"
+                  name="sortDirection"
+                  value="def"
+                />
+              </div>
+
+              <div>
+                <label for="sort-asc">(A-Z, 0-9)</label>
+                <input
+                  type="radio"
+                  id="sort-asc"
+                  name="sortDirection"
+                  value="asc"
+                />
+              </div>
+
+              <div>
+                <label for="sort-desc">(Z-A, 9-0)</label>
+                <input
+                  type="radio"
+                  id="sort-desc"
+                  name="sortDirection"
+                  value="desc"
+                />
+              </div>
+            </fieldset>
+          </fieldset>
+          <fieldset id="filter-by-author">
+            <legend>Filter by Author</legend>
+            <div id="author-filter-options">
+              <div class="author-checkbox-container">
+                <label for="all-author-names">All</label>
+                <input
+                  checked
+                  type="checkbox"
+                  id="all-author-names"
+                  name="authorFilter"
+                  value="All"
+                />
+              </div>
+            </div>
+          </fieldset>
+        </form>
         <div id="search-results"></div>
       </div>
     </main>
