@@ -17,6 +17,9 @@ import {
   firstAuthorCheckboxContainer,
 } from './domElements.js'
 
+let cachedLinesRegExp = null
+let cachedSearchTerm = ''
+
 let poems = []
 let poemsClone = []
 
@@ -61,7 +64,7 @@ export async function loadPoems(params) {
 }
 
 function showSearchResults() {
-  const linesRegExp = new RegExp(searchFormEntries.lines, 'gi')
+  const linesRegExp = getLinesRegExp()
   let listItemsHTML = ''
 
   for (const { title, author, linecount, lines } of poemsClone) {
@@ -207,4 +210,23 @@ export function handleCheckboxes(event) {
       (checkbox) => checkbox.checked
     )
   }
+}
+
+/**
+ * Returns a cached RegExp object for matching poem lines based on the user's input.
+ *
+ * This function checks if a cached version of the RegExp already exists for the current
+ * search term (searchFormEntries.lines). If not, it creates a new global, case-insensitive
+ * RegExp and caches it for future use. This avoids unnecessary re-creation of the same
+ * regular expression and improves performance when filtering or highlighting matching lines.
+ *
+ * @returns {RegExp|null} A RegExp object for matching lines, or null if no search term is provided.
+ */
+function getLinesRegExp() {
+  const term = searchFormEntries.lines
+  if (term !== cachedSearchTerm) {
+    cachedSearchTerm = term
+    cachedLinesRegExp = new RegExp(term, 'gi')
+  }
+  return cachedLinesRegExp
 }
