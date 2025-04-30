@@ -192,19 +192,21 @@ function insertAuthorCheckboxes() {
 }
 
 export function handleCheckboxes(event) {
+  const isAuthorFilter = event.target.name === 'authorFilter'
+
+  if (!isAuthorFilter) return
+
   const authorCheckboxes = Array.from(
-    document.querySelectorAll('.author-checkbox')
+    listControlsForm.querySelectorAll('.author-checkbox')
   )
 
-  if (event.target.name === 'authorFilter') {
-    if (event.target === allAuthorNames) {
-      listControlsForm
-        .querySelectorAll('[name="authorFilter"]')
-        .forEach((checkbox) => (checkbox.checked = allAuthorNames.checked))
-    } else {
-      allAuthorNames.checked = authorCheckboxes.every(
-        (checkbox) => checkbox.checked
-      )
-    }
+  if (event.target === allAuthorNames) {
+    authorCheckboxes.forEach(
+      (checkbox) => (checkbox.checked = allAuthorNames.checked)
+    )
+  } else {
+    allAuthorNames.checked = authorCheckboxes.every(
+      (checkbox) => checkbox.checked
+    )
   }
 }
