@@ -2,4 +2,4 @@
 
 ## Development / AI Assistance
 
-Parts of this project, including utility code snippets like the `cloneViaJson` function, were developed with the assistance of Google Gemini / Programming Partner.
+Parts of this project, including utility code snippets like the `cloneViaJson` function, were developed with the assistance of Google Gemini / Programming Partner and OpenAI’s ChatGPT.
