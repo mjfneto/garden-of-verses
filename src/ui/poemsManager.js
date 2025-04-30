@@ -8,16 +8,14 @@ import {
   clearAfter,
 } from './general.js'
 import { cloneViaJson, randomNotFoundMsg } from '../utils/utils.js'
-import { SELECTORS } from './domSelectors.js'
-
-const searchForm = document.querySelector(SELECTORS.searchForm)
-const searchResults = document.querySelector(SELECTORS.searchResults)
-const listControlsForm = document.querySelector(SELECTORS.listControls)
-const authorFilterOptions = document.querySelector(SELECTORS.authorOptions)
-const allAuthorNames = document.querySelector(SELECTORS.allAuthors)
-const firstAuthorCheckboxContainer = document.querySelector(
-  SELECTORS.authorCheckboxContainers
-)
+import {
+  searchForm,
+  searchResults,
+  listControlsForm,
+  authorFilterOptions,
+  allAuthorNames,
+  firstAuthorCheckboxContainer,
+} from './domElements.js'
 
 let poems = []
 let poemsClone = []
