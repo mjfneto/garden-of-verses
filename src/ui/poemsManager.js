@@ -131,9 +131,8 @@ function showNotFound(data) {
   searchResults.appendChild(p)
 }
 
-function filterPoems() {
-  const listControlsFormData = new FormData(listControlsForm)
-  const authorFilters = listControlsFormData
+function filterPoems(formData = new FormData(listControlsForm)) {
+  const authorFilters = formData
     .getAll('authorFilter')
     .filter((author) => author !== 'All')
 
@@ -142,10 +141,9 @@ function filterPoems() {
   )
 }
 
-function sortPoems() {
-  const listControlsFormData = new FormData(listControlsForm)
-  const sortCriteria = listControlsFormData.get('sortCriteria')
-  const sortDirection = listControlsFormData.get('sortDirection')
+function sortPoems(formData = new FormData(listControlsForm)) {
+  const sortCriteria = formData.get('sortCriteria')
+  const sortDirection = formData.get('sortDirection')
 
   if (sortDirection === 'asc' || sortDirection === 'desc') {
     poemsClone.sort(function (a, b) {
