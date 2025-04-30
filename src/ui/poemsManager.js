@@ -73,15 +73,15 @@ function showSearchResults() {
     if (searchFormEntries.lines) {
       matchesHTML = lines.reduce((html, line, index) => {
         const withLineNumber = `(${index + 1}) ${line}`
-      
+
         const hasMatch = linesRegExp.test(withLineNumber)
         if (!hasMatch) return html
-      
+
         const highlighted = withLineNumber.replaceAll(
           linesRegExp,
           (match) => `<span>${match}</span>`
         )
-      
+
         return html + `<li>${highlighted}</li>`
       }, '')
 
@@ -106,7 +106,7 @@ function showSearchResults() {
   }
 
   let ol = document.createElement('ol')
-  ol.innerHTML = listItemsHTML
+  ol.insertAdjacentHTML('beforeend', listItemsHTML)
   searchResults.appendChild(ol)
 
   if (searchFormEntries.lines) {
