@@ -63,56 +63,54 @@ export async function loadPoems(params) {
 }
 
 function showSearchResults() {
-  let ol = document.createElement('ol')
   const linesRegExp = new RegExp(searchFormEntries.lines, 'gi')
+  let listItemsHTML = ''
 
   for (const { title, author, linecount, lines } of poemsClone) {
+    let matchesHTML = ''
+
     if (searchFormEntries.lines) {
-      const matches = lines
+      matchesHTML = lines
         .map((line, index) => `(${index + 1}) ${line}`)
-        .filter(function (line) {
-          return linesRegExp.test(line)
-        })
-        .map(function (line) {
-          return `<li>${line.replaceAll(
-            linesRegExp,
-            (line) => `<span>${line}</span>`
-          )}</li>`
-        })
+        .filter((line) => linesRegExp.test(line))
+        .map(
+          (line) =>
+            `<li>${line.replaceAll(
+              linesRegExp,
+              (m) => `<span>${m}</span>`
+            )}</li>`
+        )
         .join('')
 
-      ol.insertAdjacentHTML(
-        'beforeend',
-        `
-            <li>
-              <p class="search-result-title">${title}</p>
-              <p class="search-result-author">${author}</p>
-              <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
-              <button type="button" class="accordion matching-lines">Matching lines</button>
-              <ul class="panel lines-peek">${matches}</ul>
-            </li>
-          `
-      )
-
-      // Add "click" event listener to the button with class accordion of the last (current) li
-      ol.lastElementChild
-        .querySelector('.accordion')
-        .addEventListener('click', toggleAccordion)
+      listItemsHTML += `
+        <li>
+          <p class="search-result-title">${title}</p>
+          <p class="search-result-author">${author}</p>
+          <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
+          <button type="button" class="accordion matching-lines">Matching lines</button>
+          <ul class="panel lines-peek">${matchesHTML}</ul>
+        </li>
+      `
     } else {
-      ol.insertAdjacentHTML(
-        'beforeend',
-        `
-            <li>
-              <p class="search-result-title">${title}</p>
-              <p class="search-result-author">${author}</p>
-              <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
-            </li>
-          `
-      )
+      listItemsHTML += `
+        <li>
+          <p class="search-result-title">${title}</p>
+          <p class="search-result-author">${author}</p>
+          <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
+        </li>
+      `
     }
   }
 
+  let ol = document.createElement('ol')
+  ol.innerHTML = listItemsHTML
   searchResults.appendChild(ol)
+
+  if (searchFormEntries.lines) {
+    ol.querySelectorAll('.accordion').forEach(function (button) {
+      button.addEventListener('click', toggleAccordion)
+    })
+  }
 }
 
 function showNotFound(data) {
