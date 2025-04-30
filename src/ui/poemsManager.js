@@ -71,17 +71,19 @@ function showSearchResults() {
     let matchesHTML = ''
 
     if (searchFormEntries.lines) {
-      matchesHTML = lines
-        .map((line, index) => `(${index + 1}) ${line}`)
-        .filter((line) => linesRegExp.test(line))
-        .map(
-          (line) =>
-            `<li>${line.replaceAll(
-              linesRegExp,
-              (m) => `<span>${m}</span>`
-            )}</li>`
+      matchesHTML = lines.reduce((html, line, index) => {
+        const withLineNumber = `(${index + 1}) ${line}`
+      
+        const hasMatch = linesRegExp.test(withLineNumber)
+        if (!hasMatch) return html
+      
+        const highlighted = withLineNumber.replaceAll(
+          linesRegExp,
+          (match) => `<span>${match}</span>`
         )
-        .join('')
+      
+        return html + `<li>${highlighted}</li>`
+      }, '')
 
       listItemsHTML += `
         <li>
