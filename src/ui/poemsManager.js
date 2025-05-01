@@ -40,7 +40,7 @@ export async function loadPoems(params) {
       poems = data
       poemsClone = cloneViaJson(poems)
 
-      showResultCount(poems.length)
+      renderCount({ count: poems.length, status: 'success' })
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
       clearElement(searchResults)
@@ -55,10 +55,10 @@ export async function loadPoems(params) {
 
       switch (data.status) {
         case 404:
-          setMessage(randomNotFoundMsg(), { error: true })
+          renderCount({ text: randomNotFoundMsg(), status: 'error' })
           break
         default:
-          setMessage('Unexpected result', { error: true })
+          setMessage({ text: 'Unexpected result', status: 'error' })
       }
 
       disableForm(listControlsForm)
@@ -72,31 +72,42 @@ export async function loadPoems(params) {
     enableForm(searchForm)
   } catch (error) {
     console.log(error)
-    setMessage('Oops—something went wrong. Try again!', { error: true })
+    renderCount({
+      text: 'Oops—something went wrong. Try again!',
+      status: 'error',
+    })
   }
 }
 
-function setMessage(text, { loading = false, error = false } = {}) {
-  resultCount.className = null
-  resultCount.textContent = text
-  resultCount.className = loading ? 'loading' : error ? 'error' : ''
-}
+/**
+ * Renders the count area in one place.
+ *
+ * @param {Object} options
+ * @param {'idle'|'loading'|'error'|'success'} options.status
+ * @param {string} [options.text]     // for idle/loading/error
+ * @param {number} [options.count]    // for success
+ * @param {string} [options.postfix]  // optional custom suffix
+ */
+function renderCount({ status, text = '', count = 0, postfix = '' }) {
+  resultCount.className = '' // reset
+  resultCount.classList.add(status) // e.g. 'loading', 'error', 'success'
+  resultCount.textContent = '' // clear existing
 
-function showResultCount(n) {
-  resultCount.className = null
-  resultCount.className = 'success'
-
-  const resultNumber = document.createElement('strong')
-  resultNumber.id = 'result-number'
-  resultNumber.textContent = n
-
-  resultCount.textContent = ''
-  resultCount.append(
-    resultNumber,
-    document.createTextNode(
-      ` poetic gem${n > 1 ? 's' : ''} unearthed—time to get lost in the lines!`
-    )
-  )
+  if (status === 'success') {
+    const numberEl = document.createElement('strong')
+    numberEl.id = 'result-number'
+    numberEl.textContent = count
+    const label = `${
+      postfix ||
+      ` poetic gem${
+        count > 1 ? 's' : ''
+      }  unearthed—time to get lost in the lines!`
+    }`
+    resultCount.append(numberEl, document.createTextNode(label))
+  } else {
+    // idle / loading / error all go here
+    resultCount.textContent = text
+  }
 }
 
 function showSearchResults() {
@@ -193,11 +204,12 @@ export function updatePoems() {
   clearElement(searchResults)
   showSearchResults()
   if (poemsClone.length === 0) {
-    setMessage('No filters, no rhymes—tick a box to unleash the poetry!', {
-      error: true,
+    renderCount({
+      text: 'No filters, no rhymes—tick a box to unleash the poetry!',
+      status: 'error',
     })
   } else {
-    showResultCount(poemsClone.length)
+    renderCount({ count: poemsClone.length, status: 'success' })
   }
 }
 
