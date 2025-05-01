@@ -70,11 +70,21 @@ main #right-container {
 }
 
 main #right-container #result-count {
-  text-align: left;
+  padding: 0.25rem;
+  text-align: center;
+  background: gainsboro;
 }
 
-main #right-container #result-count #result-number {
-  font-weight: bolder;
+main #right-container #result-count.success {
+  background-color: lightgreen;
+}
+
+main #right-container #result-count.loading {
+  background-color: lightyellow;
+}
+
+main #right-container #result-count.error {
+  background-color: lightpink;
 }
 
 main #right-container #search-results {

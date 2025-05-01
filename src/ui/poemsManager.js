@@ -28,6 +28,8 @@ export async function loadPoems(params) {
   try {
     disableForm(searchForm)
 
+    setMessage('Searching for poems...', { loading: true })
+
     const data = await getPoems(params)
 
     console.log(data)
@@ -38,7 +40,7 @@ export async function loadPoems(params) {
       poems = data
       poemsClone = cloneViaJson(poems)
 
-      showResultCount()
+      showResultCount(poems.length)
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
       clearElement(searchResults)
@@ -50,7 +52,15 @@ export async function loadPoems(params) {
       poemsClone = []
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
-      showNotFound(data)
+
+      switch (data.status) {
+        case 404:
+          setMessage(randomNotFoundMsg(), { error: true })
+          break
+        default:
+          setMessage('Unexpected result', { error: true })
+      }
+
       disableForm(listControlsForm)
     } else {
       poems = []
@@ -62,14 +72,24 @@ export async function loadPoems(params) {
     enableForm(searchForm)
   } catch (error) {
     console.log(error)
+    setMessage('Oops—something went wrong. Try again!', { error: true })
   }
 }
 
-function showResultCount() {
+function setMessage(text, { loading = false, error = false } = {}) {
+  resultCount.className = null
+  resultCount.textContent = text
+  resultCount.className = loading ? 'loading' : error ? 'error' : ''
+}
+
+function showResultCount(length) {
+  resultCount.className = null
+  resultCount.className = 'success'
+
   resultCount.innerHTML = `
-    <span id="result-number">${poemsClone.length}</span> poem${
-    poemsClone.length > 1 ? 's' : ''
-  } found. Take a breath and read.`
+    <strong id="result-number">${length}</strong> poetic gem${
+    length > 1 ? 's' : ''
+  } unearthed—time to get lost in the lines!`
 }
 
 function showSearchResults() {
@@ -125,21 +145,6 @@ function showSearchResults() {
   }
 }
 
-function showNotFound(data) {
-  const { status } = data
-  let html = ''
-
-  switch (status) {
-    case 404:
-      html = randomNotFoundMsg()
-      break
-    default:
-      html = 'Unexpected result.'
-  }
-
-  resultCount.innerHTML = html
-}
-
 function filterPoems(formData = new FormData(listControlsForm)) {
   const authorFilters = formData
     .getAll('authorFilter')
@@ -180,6 +185,13 @@ export function updatePoems() {
   sortPoems()
   clearElement(searchResults)
   showSearchResults()
+  if (poemsClone.length === 0) {
+    setMessage('No filters, no rhymes—tick a box to unleash the poetry!', {
+      error: true,
+    })
+  } else {
+    showResultCount(poemsClone.length)
+  }
 }
 
 function insertAuthorCheckboxes() {
