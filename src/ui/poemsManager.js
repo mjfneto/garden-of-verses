@@ -82,14 +82,21 @@ function setMessage(text, { loading = false, error = false } = {}) {
   resultCount.className = loading ? 'loading' : error ? 'error' : ''
 }
 
-function showResultCount(length) {
+function showResultCount(n) {
   resultCount.className = null
   resultCount.className = 'success'
 
-  resultCount.innerHTML = `
-    <strong id="result-number">${length}</strong> poetic gem${
-    length > 1 ? 's' : ''
-  } unearthed—time to get lost in the lines!`
+  const resultNumber = document.createElement('strong')
+  resultNumber.id = 'result-number'
+  resultNumber.textContent = n
+
+  resultCount.textContent = ''
+  resultCount.append(
+    resultNumber,
+    document.createTextNode(
+      ` poetic gem${n > 1 ? 's' : ''} unearthed—time to get lost in the lines!`
+    )
+  )
 }
 
 function showSearchResults() {
