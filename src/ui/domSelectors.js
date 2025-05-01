@@ -4,5 +4,6 @@ export const SELECTORS = {
   searchResults: '#search-results',
   authorOptions: '#author-filter-options',
   allAuthors: '#all-author-names',
+  resultCount: '#result-count',
   authorCheckboxContainers: '.author-checkbox-container',
 }

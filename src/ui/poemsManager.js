@@ -12,6 +12,7 @@ import {
   searchForm,
   searchResults,
   listControlsForm,
+  resultCount,
   authorFilterOptions,
   allAuthorNames,
   firstAuthorCheckboxContainer,
@@ -23,9 +24,22 @@ let cachedSearchTerm = ''
 let poems = []
 let poemsClone = []
 
+/**
+ * Extract class names into constants.
+ * If you ever need to tweak styles, it’s safer to avoid magic strings. That prevents typos and makes your linter happier.
+ */
+const STATUS = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error',
+}
+
 export async function loadPoems(params) {
   try {
     disableForm(searchForm)
+
+    renderCount({ text: 'Searching for poems...', status: STATUS.LOADING })
 
     const data = await getPoems(params)
 
@@ -37,6 +51,7 @@ export async function loadPoems(params) {
       poems = data
       poemsClone = cloneViaJson(poems)
 
+      renderCount({ count: poems.length, status: STATUS.SUCCESS })
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
       clearElement(searchResults)
@@ -48,7 +63,15 @@ export async function loadPoems(params) {
       poemsClone = []
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
-      showNotFound(data)
+
+      switch (data.status) {
+        case 404:
+          renderCount({ text: randomNotFoundMsg(), status: STATUS.ERROR })
+          break
+        default:
+          setMessage({ text: 'Unexpected result', status: 'error' })
+      }
+
       disableForm(listControlsForm)
     } else {
       poems = []
@@ -60,6 +83,41 @@ export async function loadPoems(params) {
     enableForm(searchForm)
   } catch (error) {
     console.log(error)
+    renderCount({
+      text: 'Oops—something went wrong. Try again!',
+      status: STATUS.ERROR,
+    })
+  }
+}
+
+/**
+ * Renders the count area in one place.
+ *
+ * @param {Object} options
+ * @param {'idle'|'loading'|'error'|'success'} options.status
+ * @param {string} [options.text]     // for idle/loading/error
+ * @param {number} [options.count]    // for success
+ * @param {string} [options.postfix]  // optional custom suffix
+ */
+function renderCount({ status, text = '', count = 0, postfix = '' }) {
+  resultCount.className = '' // reset
+  resultCount.classList.add(status) // e.g. 'loading', 'error', 'success'
+  resultCount.textContent = '' // clear existing
+
+  if (status === 'success') {
+    const numberEl = document.createElement('strong')
+    numberEl.id = 'result-number'
+    numberEl.textContent = count
+    const label = `${
+      postfix ||
+      ` poetic gem${
+        count > 1 ? 's' : ''
+      }  unearthed—time to get lost in the lines!`
+    }`
+    resultCount.append(numberEl, document.createTextNode(label))
+  } else {
+    // idle / loading / error all go here
+    resultCount.textContent = text
   }
 }
 
@@ -116,21 +174,6 @@ function showSearchResults() {
   }
 }
 
-function showNotFound(data) {
-  const { status } = data
-  let p = document.createElement('p')
-
-  switch (status) {
-    case 404:
-      p.textContent = randomNotFoundMsg()
-      break
-    default:
-      p.textContent = 'Unexpected result.'
-  }
-
-  searchResults.appendChild(p)
-}
-
 function filterPoems(formData = new FormData(listControlsForm)) {
   const authorFilters = formData
     .getAll('authorFilter')
@@ -171,6 +214,14 @@ export function updatePoems() {
   sortPoems()
   clearElement(searchResults)
   showSearchResults()
+  if (poemsClone.length === 0) {
+    renderCount({
+      text: 'No filters, no rhymes—tick a box to unleash the poetry!',
+      status: STATUS.ERROR,
+    })
+  } else {
+    renderCount({ count: poemsClone.length, status: STATUS.SUCCESS })
+  }
 }
 
 function insertAuthorCheckboxes() {
