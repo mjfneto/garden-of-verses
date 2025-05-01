@@ -24,6 +24,17 @@ let cachedSearchTerm = ''
 let poems = []
 let poemsClone = []
 
+/**
+ * Extract class names into constants.
+ * If you ever need to tweak styles, it’s safer to avoid magic strings. That prevents typos and makes your linter happier.
+ */
+const STATUS = {
+  IDLE: 'idle',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+  ERROR: 'error',
+}
+
 export async function loadPoems(params) {
   try {
     disableForm(searchForm)
@@ -40,7 +51,7 @@ export async function loadPoems(params) {
       poems = data
       poemsClone = cloneViaJson(poems)
 
-      renderCount({ count: poems.length, status: 'success' })
+      renderCount({ count: poems.length, status: STATUS.SUCCESS })
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
       clearElement(searchResults)
@@ -55,7 +66,7 @@ export async function loadPoems(params) {
 
       switch (data.status) {
         case 404:
-          renderCount({ text: randomNotFoundMsg(), status: 'error' })
+          renderCount({ text: randomNotFoundMsg(), status: STATUS.ERROR })
           break
         default:
           setMessage({ text: 'Unexpected result', status: 'error' })
@@ -74,7 +85,7 @@ export async function loadPoems(params) {
     console.log(error)
     renderCount({
       text: 'Oops—something went wrong. Try again!',
-      status: 'error',
+      status: STATUS.ERROR,
     })
   }
 }
@@ -206,10 +217,10 @@ export function updatePoems() {
   if (poemsClone.length === 0) {
     renderCount({
       text: 'No filters, no rhymes—tick a box to unleash the poetry!',
-      status: 'error',
+      status: STATUS.ERROR,
     })
   } else {
-    renderCount({ count: poemsClone.length, status: 'success' })
+    renderCount({ count: poemsClone.length, status: STATUS.SUCCESS })
   }
 }
 
