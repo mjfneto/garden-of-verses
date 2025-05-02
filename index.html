@@ -16,8 +16,12 @@
     </header>
 
     <main>
-      <div id="left-container">
-        <form id="search-form">
+      <section id="left-container">
+        <form id="search-form" aria-describedby="form-description">
+          <p id="form-description" class="visually-hidden">
+            Search for poems using title, author or lines.
+          </p>
+
           <fieldset id="input-field">
             <legend>Input fields</legend>
 
@@ -56,8 +60,8 @@
 
           <button type="submit">Search</button>
         </form>
-      </div>
-      <div id="right-container">
+      </section>
+      <aside id="right-container" aria-label="Search filters and results">
         <form id="list-controls-form">
           <fieldset id="order-by">
             <legend>Order by</legend>
@@ -124,7 +128,7 @@
           <p>Begin a search, and perhaps a poem will speak to you.</p>
         </div>
         <div id="search-results"></div>
-      </div>
+      </aside>
     </main>
 
     <script type="module" src="index.js"></script>
