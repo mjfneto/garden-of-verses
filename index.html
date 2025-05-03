@@ -11,50 +11,96 @@
     <title>Garden of Verses</title>
   </head>
   <body>
+    <header>
+      <h1>Garden of Verses</h1>
+    </header>
+
     <main>
-      <div id="left-container">
-        <h1>Garden of Verses</h1>
-        <form id="search-form">
+      <section id="left-container">
+        <form id="search-form" aria-describedby="search-desc">
+          <p id="search-desc" class="visually-hidden">
+            Enter one or more fields to search for a poem by title, author, or
+            content line.
+          </p>
           <fieldset id="input-field">
-            <legend>Input fields</legend>
+            <legend>Search criteria</legend>
 
             <label for="title">
               Title
-              <input type="text" name="title" id="title" />
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="e.g., Ozymandias"
+              />
             </label>
 
             <label for="author">
               Author
-              <input type="text" name="author" id="author" />
+              <input
+                type="text"
+                name="author"
+                id="author"
+                placeholder="e.g., Percy Bysshe Shelley"
+              />
             </label>
 
             <label for="lines">
               Part(s) of a poem
-              <input type="text" name="lines" id="lines" />
+              <input
+                type="text"
+                name="lines"
+                id="lines"
+                placeholder="e.g., king of kings"
+              />
             </label>
           </fieldset>
 
-          <label for="random">
-            Random
-            <input type="checkbox" name="random" id="random" />
-          </label>
+          <fieldset id="optional-filters">
+            <legend>Optional filters</legend>
 
-          <div id="number-inputs">
-            <label for="linecount">
-              Line count
-              <input type="number" name="linecount" id="linecount" min="1" />
-            </label>
+            <div>
+              <label for="random">
+                Return poems randomly
+                <input id="random" name="random" type="checkbox" />
+              </label>
+            </div>
 
-            <label for="poemcount">
-              Poem count
-              <input type="number" name="poemcount" id="poemcount" min="1" />
-            </label>
-          </div>
+            <div id="number-inputs">
+              <label for="linecount">
+                Line count
+                <input
+                  type="number"
+                  name="linecount"
+                  id="linecount"
+                  min="1"
+                  aria-describedby="line-count-desc"
+                />
+              </label>
+              <p id="line-count-desc" class="visually-hidden">
+                Enter the number of lines each poem should have. Minimum 1.
+              </p>
 
-          <button type="submit">Search</button>
+              <label for="poemcount">
+                Poem count
+                <input
+                  type="number"
+                  name="poemcount"
+                  id="poemcount"
+                  min="1"
+                  aria-describedby="poem-count-desc"
+                />
+              </label>
+              <p id="poem-count-desc" class="visually-hidden">
+                Specify how many poems to return in the results. Minimum 1.
+              </p>
+            </div>
+          </fieldset>
+
+          <button type="submit">Search for poems</button>
         </form>
-      </div>
-      <div id="right-container">
+      </section>
+      <aside id="right-container" aria-label="Search filters and results">
         <form id="list-controls-form">
           <fieldset id="order-by">
             <legend>Order by</legend>
@@ -102,7 +148,7 @@
             </fieldset>
           </fieldset>
           <fieldset id="filter-by-author">
-            <legend>Filter by Author</legend>
+            <legend>Filter by author</legend>
             <div id="author-filter-options">
               <div class="author-checkbox-container">
                 <label for="all-author-names">All</label>
@@ -121,7 +167,7 @@
           <p>Begin a search, and perhaps a poem will speak to you.</p>
         </div>
         <div id="search-results"></div>
-      </div>
+      </aside>
     </main>
 
     <script type="module" src="index.js"></script>
