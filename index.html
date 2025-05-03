@@ -17,46 +17,85 @@
 
     <main>
       <section id="left-container">
-        <form id="search-form" aria-describedby="form-description">
-          <p id="form-description" class="visually-hidden">
-            Search for poems using title, author or lines.
+        <form id="search-form" aria-describedby="search-desc">
+          <p id="search-desc" class="visually-hidden">
+            Enter one or more fields to search for a poem by title, author, or
+            content line.
           </p>
-
           <fieldset id="input-field">
-            <legend>Input fields</legend>
+            <legend>Search criteria</legend>
 
             <label for="title">
               Title
-              <input type="text" name="title" id="title" />
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="e.g., Ozymandias"
+              />
             </label>
 
             <label for="author">
               Author
-              <input type="text" name="author" id="author" />
+              <input
+                type="text"
+                name="author"
+                id="author"
+                placeholder="e.g., Percy Bysshe Shelley"
+              />
             </label>
 
             <label for="lines">
               Part(s) of a poem
-              <input type="text" name="lines" id="lines" />
+              <input
+                type="text"
+                name="lines"
+                id="lines"
+                placeholder="e.g., king of kings"
+              />
             </label>
           </fieldset>
 
-          <label for="random">
-            Random
-            <input type="checkbox" name="random" id="random" />
-          </label>
+          <fieldset id="optional-filters">
+            <legend>Optional filters</legend>
 
-          <div id="number-inputs">
-            <label for="linecount">
-              Line count
-              <input type="number" name="linecount" id="linecount" min="1" />
-            </label>
+            <div>
+              <label for="random">
+                Return a random poem
+                <input id="random" name="random" type="checkbox" />
+              </label>
+            </div>
 
-            <label for="poemcount">
-              Poem count
-              <input type="number" name="poemcount" id="poemcount" min="1" />
-            </label>
-          </div>
+            <div id="number-inputs">
+              <label for="linecount">
+                Line count
+                <input
+                  type="number"
+                  name="linecount"
+                  id="linecount"
+                  min="1"
+                  aria-describedby="line-count-desc"
+                />
+              </label>
+              <p id="line-count-desc" class="visually-hidden">
+                Enter the number of lines each poem should have. Minimum 1.
+              </p>
+
+              <label for="poemcount">
+                Poem count
+                <input
+                  type="number"
+                  name="poemcount"
+                  id="poemcount"
+                  min="1"
+                  aria-describedby="poem-count-desc"
+                />
+              </label>
+              <p id="poem-count-desc" class="visually-hidden">
+                Specify how many poems to return in the results. Minimum 1.
+              </p>
+            </div>
+          </fieldset>
 
           <button type="submit">Search for poems</button>
         </form>
@@ -109,7 +148,7 @@
             </fieldset>
           </fieldset>
           <fieldset id="filter-by-author">
-            <legend>Filter by Author</legend>
+            <legend>Filter by author</legend>
             <div id="author-filter-options">
               <div class="author-checkbox-container">
                 <label for="all-author-names">All</label>

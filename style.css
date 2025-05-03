@@ -78,6 +78,11 @@ main {
   gap: 1rem;
 }
 
+main #left-container #search-form fieldset + fieldset,
+main #left-container #search-form button[type='submit'] {
+  margin-top: 0.75rem;
+}
+
 main #left-container #search-form fieldset#input-field {
   padding: 0.25rem 0.75rem;
 }
@@ -98,7 +103,11 @@ main #left-container #search-form #number-inputs {
   margin: 0.75rem 0;
 }
 
-main #left-container #search-form #random {
+main #left-container #search-form #optional-filters {
+  padding: 0.25rem 0.75rem;
+}
+
+main #left-container #search-form #optional-filters #random {
   display: inline;
   width: auto;
   margin: 0;
