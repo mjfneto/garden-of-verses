@@ -4,6 +4,7 @@ import {
   loadPoems,
   updatePoems,
 } from './src/ui/poemsUI.js'
+import { noSpecialCharsRegex } from './src/validationPatterns.js'
 import { buildSearchParams } from './src/utils/searchHelpers.js'
 
 const searchForm = document.querySelector(SELECTORS.searchForm)
@@ -16,6 +17,17 @@ function onSearchSubmit(event) {
 
   const searchFormData = new FormData(searchForm)
   searchFormEntries = Object.fromEntries(searchFormData.entries())
+
+  if (
+    Object.values(searchFormEntries).some(
+      (val) => !noSpecialCharsRegex.test(val)
+    )
+  ) {
+    alert(
+      'Please use only letters, numbers, and spaces. No special characters allowed.'
+    )
+    return
+  }
 
   if (Object.values(searchFormEntries).every((val) => !val)) {
     alert('Kindly fill out at least one field before you submit the form.')
