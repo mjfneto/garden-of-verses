@@ -7,7 +7,7 @@ import {
   toggleAccordion,
   clearAfter,
 } from './general.js'
-import { cloneViaJson, randomNotFoundMsg } from '../utils/utils.js'
+import { cloneViaJson, batchArray, randomNotFoundMsg } from '../utils/utils.js'
 import {
   searchForm,
   searchResults,
@@ -23,6 +23,7 @@ let cachedSearchTerm = ''
 
 let poems = []
 let poemsClone = []
+let poemsPages = []
 
 /**
  * Extract class names into constants.
@@ -50,6 +51,10 @@ export async function loadPoems(params) {
     if (data instanceof Array) {
       poems = data
       poemsClone = cloneViaJson(poems)
+
+      poemsPages = batchArray(poems)
+
+      console.log(poemsPages)
 
       renderCount({ count: poems.length, status: STATUS.SUCCESS })
       clearAfter(firstAuthorCheckboxContainer)
