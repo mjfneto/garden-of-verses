@@ -257,6 +257,18 @@ main #right-container #result-count.error {
   background-color: lightpink;
 }
 
+main #right-container ul.pagination-list {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  list-style: none;
+  padding-left: 0;
+}
+
+main #right-container ul.pagination-list li button {
+  padding: 0.25rem;
+}
+
 main #right-container #search-results {
   padding: 1rem 1rem 1rem 0;
   overflow-y: auto;

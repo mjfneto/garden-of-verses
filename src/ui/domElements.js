@@ -18,3 +18,4 @@ export const allAuthorNames = document.querySelector(SELECTORS.allAuthors)
 export const firstAuthorCheckboxContainer = document.querySelector(
   SELECTORS.authorCheckboxContainers
 )
+export const pagination = document.querySelector(SELECTORS.pagination)

@@ -6,4 +6,5 @@ export const SELECTORS = {
   allAuthors: '#all-author-names',
   resultCount: '#result-count',
   authorCheckboxContainers: '.author-checkbox-container',
+  pagination: '#pagination',
 }
