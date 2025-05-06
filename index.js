@@ -1,3 +1,4 @@
+import { pagination } from './src/ui/domElements.js'
 import {
   SELECTORS,
   handleCheckboxes,
@@ -6,6 +7,7 @@ import {
 } from './src/ui/poemsUI.js'
 import { noSpecialCharsRegex } from './src/validationPatterns.js'
 import { buildSearchParams } from './src/utils/searchHelpers.js'
+import { handlePaginationButtons } from './src/ui/poemsManager.js'
 
 const searchForm = document.querySelector(SELECTORS.searchForm)
 const listControlsForm = document.querySelector(SELECTORS.listControls)
@@ -43,5 +45,10 @@ function onListControlsChange(event) {
   updatePoems()
 }
 
+function onPaginationClicked(event) {
+  handlePaginationButtons(event)
+}
+
 searchForm.addEventListener('submit', onSearchSubmit)
 listControlsForm.addEventListener('change', onListControlsChange)
+pagination.addEventListener('click', onPaginationClicked)

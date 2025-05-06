@@ -1,3 +1,5 @@
+import { paginationList } from './domElements.js'
+
 export function clearElement(element) {
   while (element.firstChild) {
     element.firstChild.remove()
@@ -31,5 +33,17 @@ export function toggleAccordion() {
     panel.style.maxHeight = null
   } else {
     panel.style.maxHeight = panel.scrollHeight + 'px'
+  }
+}
+
+export function enablePaginationButtons() {
+  for (let button of paginationList.querySelectorAll('button')) {
+    button.disabled = false
+  }
+}
+
+export function disablePaginationButtons() {
+  for (let button of paginationList.querySelectorAll('button')) {
+    button.disabled = true
   }
 }

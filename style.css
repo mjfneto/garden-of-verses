@@ -257,16 +257,37 @@ main #right-container #result-count.error {
   background-color: lightpink;
 }
 
-main #right-container ul.pagination-list {
+main #right-container #pagination #pagination-list {
   display: flex;
-  justify-content: center;
   gap: 0.25rem;
   list-style: none;
   padding-left: 0;
+  margin: 0 auto;
+  overflow-x: auto;
 }
 
-main #right-container ul.pagination-list li button {
+main #right-container #pagination #pagination-list li:first-child {
+  position: sticky;
+  top: 0;
+  left: 0;
+  margin-left: auto;
+}
+
+main #right-container #pagination #pagination-list li:last-child {
+  position: sticky;
+  top: 0;
+  right: 0;
+  margin-right: auto;
+}
+
+main #right-container #pagination #pagination-list li button {
   padding: 0.25rem;
+}
+
+main #right-container #pagination #pagination-list li button.current:enabled,
+main #right-container #pagination #pagination-list li button:enabled:hover {
+  color: white;
+  background-color: gray;
 }
 
 main #right-container #search-results {

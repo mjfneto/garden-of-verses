@@ -6,6 +6,8 @@ import {
   clearElement,
   toggleAccordion,
   clearAfter,
+  enablePaginationButtons,
+  disablePaginationButtons,
 } from './general.js'
 import { cloneViaJson, batchArray, randomNotFoundMsg } from '../utils/utils.js'
 import {
@@ -16,6 +18,7 @@ import {
   authorFilterOptions,
   allAuthorNames,
   firstAuthorCheckboxContainer,
+  paginationList,
 } from './domElements.js'
 
 let cachedLinesRegExp = null
@@ -24,6 +27,7 @@ let cachedSearchTerm = ''
 let poems = []
 let poemsClone = []
 let poemsPages = []
+let currentPage = 1
 
 /**
  * Extract class names into constants.
@@ -52,13 +56,17 @@ export async function loadPoems(params) {
       poems = data
       poemsClone = cloneViaJson(poems)
 
-      poemsPages = batchArray(poems)
+      poemsPages = batchArray(cloneViaJson(poems))
 
       console.log(poemsPages)
+      clearElement(paginationList)
+      insertPaginationButtons(poemsPages.length)
 
       renderCount({ count: poems.length, status: STATUS.SUCCESS })
+
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
+
       clearElement(searchResults)
       sortPoems()
       showSearchResults()
@@ -124,6 +132,45 @@ function renderCount({ status, text = '', count = 0, postfix = '' }) {
     // idle / loading / error all go here
     resultCount.textContent = text
   }
+}
+
+function insertPaginationButtons(length) {
+  let previousLi = document.createElement('li')
+  let previousButton = document.createElement('button')
+  previousButton.type = 'button'
+  previousButton.dataset.page = 'previous'
+  previousButton.ariaLabel = 'Previous page'
+  previousButton.textContent = 'Previous'
+
+  previousLi.appendChild(previousButton)
+  paginationList.appendChild(previousLi)
+
+  for (let i = 1; i <= length; i += 1) {
+    let li = document.createElement('li')
+    let button = document.createElement('button')
+
+    if (i === 1) {
+      currentPage = i
+      button.classList.add('current')
+    }
+
+    button.dataset.page = i
+    button.type = 'button'
+    button.ariaLabel = `Page ${i}`
+    button.textContent = i
+    li.appendChild(button)
+    paginationList.appendChild(li)
+  }
+
+  let nextLi = document.createElement('li')
+  let nextButton = document.createElement('button')
+  nextButton.type = 'button'
+  nextButton.dataset.page = 'next'
+  nextButton.ariaLabel = 'Next page'
+  nextButton.textContent = 'Next'
+
+  nextLi.appendChild(nextButton)
+  paginationList.appendChild(nextLi)
 }
 
 function showSearchResults() {
@@ -266,6 +313,33 @@ export function handleCheckboxes(event) {
       (checkbox) => checkbox.checked
     )
   }
+}
+
+export function handlePaginationButtons(event) {
+  const button = event.target
+
+  if (button.tagName !== 'BUTTON') return
+
+  const { page } = button.dataset
+  const totalPages = poemsPages.length
+
+  if (page === 'previous') {
+    currentPage = currentPage === 1 ? totalPages : currentPage - 1
+  } else if (page === 'next') {
+    currentPage = currentPage === totalPages ? 1 : currentPage + 1
+  } else {
+    const pageNum = Number(page)
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+      currentPage = pageNum
+    }
+  }
+
+  const allButtons = paginationList.querySelectorAll('[data-page]')
+  allButtons.forEach((btn) => btn.classList.remove('current'))
+  const currentButton = paginationList.querySelector(
+    `[data-page="${currentPage}"]`
+  )
+  currentButton.classList.add('current')
 }
 
 /**
