@@ -69,11 +69,12 @@ export async function loadPoems(params) {
 
       clearElement(searchResults)
       sortPoems()
-      showSearchResults()
+      showSearchResults(poemsPages[0])
       enableForm(listControlsForm)
     } else if (typeof data === 'object' && data !== null) {
       poems = []
       poemsClone = []
+      poemsPages = []
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
 
@@ -89,6 +90,7 @@ export async function loadPoems(params) {
     } else {
       poems = []
       poemsClone = []
+      poemsPages = []
       console.warn('Data in unknown format:', data)
       disableForm(listControlsForm)
     }
@@ -173,11 +175,11 @@ function insertPaginationButtons(length) {
   paginationList.appendChild(nextLi)
 }
 
-function showSearchResults() {
+function showSearchResults(page = []) {
   const linesRegExp = getLinesRegExp()
   let listItemsHTML = ''
 
-  for (const { title, author, linecount, lines } of poemsClone) {
+  for (const { title, author, linecount, lines } of page) {
     let matchesHTML = ''
 
     if (searchFormEntries.lines) {
@@ -264,8 +266,14 @@ function sortPoems(formData = new FormData(listControlsForm)) {
 export function updatePoems() {
   filterPoems()
   sortPoems()
+  poemsPages = batchArray(poemsClone)
+
+  clearElement(paginationList)
+  poemsPages.length && insertPaginationButtons(poemsPages.length)
+
   clearElement(searchResults)
-  showSearchResults()
+  showSearchResults(poemsPages[currentPage - 1])
+
   if (poemsClone.length === 0) {
     renderCount({
       text: 'No filters, no rhymes—tick a box to unleash the poetry!',
@@ -315,10 +323,10 @@ export function handleCheckboxes(event) {
   }
 }
 
-export function handlePaginationButtons(event) {
-  const button = event.target
+export function handlePagination(event) {
+  clearElement(searchResults)
 
-  if (button.tagName !== 'BUTTON') return
+  const button = event.target
 
   const { page } = button.dataset
   const totalPages = poemsPages.length
@@ -340,6 +348,8 @@ export function handlePaginationButtons(event) {
     `[data-page="${currentPage}"]`
   )
   currentButton.classList.add('current')
+
+  showSearchResults(poemsPages[currentPage - 1])
 }
 
 /**
