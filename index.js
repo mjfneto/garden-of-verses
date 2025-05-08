@@ -41,13 +41,14 @@ function onSearchSubmit(event) {
 }
 
 function onListControlsChange(event) {
-  handleCheckboxes(event)
+  if (event.target.type === 'checkbox') handleCheckboxes(event)
   updatePoems()
 }
 
 function onPaginationClicked(event) {
   if (event.target.tagName !== 'BUTTON') return
   handlePagination(event)
+  updatePoems()
 }
 
 searchForm.addEventListener('submit', onSearchSubmit)
