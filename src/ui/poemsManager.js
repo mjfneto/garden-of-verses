@@ -25,6 +25,7 @@ let cachedSearchTerm = ''
 let originalPoems = []
 let currentPage = 1
 let totalPages = 0
+let pageSize = 50
 
 /**
  * Extract class names into constants.
@@ -112,7 +113,7 @@ export async function loadPoems(params) {
 export function updatePoems() {
   const filtered = filterPoems(cloneViaJson(originalPoems))
   const sorted = sortPoems(filtered)
-  const paginated = batchArray(sorted)
+  const paginated = batchArray(sorted, pageSize)
 
   totalPages = paginated.length
 
@@ -124,8 +125,9 @@ export function updatePoems() {
   )
   currentPageButton && currentPageButton.scrollIntoView({ inline: 'center' })
 
+  const currentIndex = currentPage - 1
   clearElement(searchResults)
-  showSearchResults(paginated[currentPage - 1])
+  showSearchResults(paginated[currentIndex], currentIndex * pageSize + 1)
 
   renderCount(
     filtered.length === 0
@@ -276,7 +278,7 @@ export function handlePagination(event) {
   currentButton.classList.add('current')
 }
 
-function showSearchResults(page = []) {
+function showSearchResults(page = [], start = 1) {
   const linesRegExp = getLinesRegExp()
   let listItemsHTML = ''
 
@@ -319,6 +321,7 @@ function showSearchResults(page = []) {
   }
 
   let ol = document.createElement('ol')
+  ol.start = start
   ol.insertAdjacentHTML('beforeend', listItemsHTML)
   searchResults.appendChild(ol)
 
