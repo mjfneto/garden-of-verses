@@ -6,8 +6,6 @@ import {
   clearElement,
   toggleAccordion,
   clearAfter,
-  enablePaginationButtons,
-  disablePaginationButtons,
 } from './general.js'
 import { cloneViaJson, batchArray, randomNotFoundMsg } from '../utils/utils.js'
 import {
