@@ -22,10 +22,12 @@ import {
 let cachedLinesRegExp = null
 let cachedSearchTerm = ''
 
-let originalPoems = []
-let currentPage = 1
-let totalPages = 0
-let pageSize = 50
+let state = {
+  originalPoems: [],
+  currentPage: 1,
+  totalPages: 0,
+  pageSize: 50,
+}
 
 /**
  * Extract class names into constants.
@@ -51,11 +53,11 @@ export async function loadPoems(params) {
     allAuthorNames.checked = true
 
     if (data instanceof Array) {
-      originalPoems = data
-      currentPage = 1
-      totalPages = 0
+      state.originalPoems = data
+      state.currentPage = 1
+      state.totalPages = 0
 
-      renderCount({ count: originalPoems.length, status: STATUS.SUCCESS })
+      renderCount({ count: state.originalPoems.length, status: STATUS.SUCCESS })
 
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
@@ -64,9 +66,9 @@ export async function loadPoems(params) {
 
       updatePoems()
     } else if (typeof data === 'object' && data !== null) {
-      originalPoems = []
-      currentPage = 1
-      totalPages = 0
+      state.originalPoems = []
+      state.currentPage = 1
+      state.totalPages = 0
 
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
@@ -82,9 +84,9 @@ export async function loadPoems(params) {
 
       disableForm(listControlsForm)
     } else {
-      originalPoems = []
-      currentPage = 1
-      totalPages = 0
+      state.originalPoems = []
+      state.currentPage = 1
+      state.totalPages = 0
 
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
@@ -99,9 +101,9 @@ export async function loadPoems(params) {
   } catch (error) {
     console.log(error)
 
-    originalPoems = []
-    currentPage = 1
-    totalPages = 0
+    state.originalPoems = []
+    state.currentPage = 1
+    state.totalPages = 0
 
     renderCount({
       text: 'Oops—something went wrong. Try again!',
@@ -111,11 +113,13 @@ export async function loadPoems(params) {
 }
 
 export function updatePoems() {
-  const filtered = filterPoems(cloneViaJson(originalPoems))
+  const { currentPage, pageSize } = state
+
+  const filtered = filterPoems(cloneViaJson(state.originalPoems))
   const sorted = sortPoems(filtered)
   const paginated = batchArray(sorted, pageSize)
 
-  totalPages = paginated.length
+  state.totalPages = paginated.length
 
   clearElement(paginationList)
   paginated.length && insertPaginationButtons(paginated.length)
@@ -177,7 +181,7 @@ function sortPoems(poems) {
 }
 
 function insertAuthorCheckboxes() {
-  const authors = originalPoems
+  const authors = state.originalPoems
     .map(({ author }) => author)
     .filter((author, index, array) => array.indexOf(author) === index)
     .sort((a, b) => a.localeCompare(b))
@@ -211,7 +215,7 @@ function insertPaginationButtons(length) {
     let li = document.createElement('li')
     let button = document.createElement('button')
 
-    if (i === currentPage) {
+    if (i === state.currentPage) {
       button.classList.add('current')
     }
 
@@ -258,22 +262,25 @@ export function handlePagination(event) {
   const button = event.target
 
   const { page } = button.dataset
+  const { totalPages } = state
 
   if (page === 'previous') {
-    currentPage = currentPage === 1 ? totalPages : currentPage - 1
+    state.currentPage =
+      state.currentPage === 1 ? totalPages : state.currentPage - 1
   } else if (page === 'next') {
-    currentPage = currentPage === totalPages ? 1 : currentPage + 1
+    state.currentPage =
+      state.currentPage === totalPages ? 1 : state.currentPage + 1
   } else {
     const pageNum = Number(page)
     if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
-      currentPage = pageNum
+      state.currentPage = pageNum
     }
   }
 
   const allButtons = paginationList.querySelectorAll('[data-page]')
   allButtons.forEach((btn) => btn.classList.remove('current'))
   const currentButton = paginationList.querySelector(
-    `[data-page="${currentPage}"]`
+    `[data-page="${state.currentPage}"]`
   )
   currentButton.classList.add('current')
 }
