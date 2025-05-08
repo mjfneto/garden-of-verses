@@ -180,6 +180,7 @@ function insertAuthorCheckboxes() {
   const authors = originalPoems
     .map(({ author }) => author)
     .filter((author, index, array) => array.indexOf(author) === index)
+    .sort((a, b) => a.localeCompare(b))
 
   let checkboxes = authors
     .map(function (author, index) {
