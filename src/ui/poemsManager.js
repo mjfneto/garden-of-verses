@@ -211,7 +211,7 @@ function insertPaginationButtons(pages) {
 
   pagination.appendChild(previousButton)
 
-  let paginationList = document.createElement('ul')
+  let paginationList = document.createElement('ol')
   paginationList.id = 'pagination-list'
 
   for (let i = 1; i <= pages.length; i += 1) {
@@ -220,11 +220,11 @@ function insertPaginationButtons(pages) {
 
     if (i === state.currentPage) {
       button.classList.add('current')
+      button.ariaCurrent = 'page'
     }
 
     button.dataset.page = i
     button.type = 'button'
-    button.ariaLabel = `Page ${i}`
     button.classList.add('pagination-button')
     button.textContent = i
     li.appendChild(button)
