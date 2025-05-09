@@ -257,33 +257,25 @@ main #right-container #result-count.error {
   background-color: lightpink;
 }
 
+main #right-container #pagination {
+  display: flex;
+  gap: 8pt;
+}
+
 main #right-container #pagination #pagination-list {
   display: flex;
-  gap: 0.25rem;
+  gap: 8pt;
   list-style: none;
   padding-left: 0;
   margin: 0 auto;
   overflow-x: auto;
 }
 
-main #right-container #pagination #pagination-list li:first-child {
-  position: sticky;
-  top: 0;
-  left: 0;
-  margin-left: auto;
-}
-
-main #right-container #pagination #pagination-list li:last-child {
-  position: sticky;
-  top: 0;
-  right: 0;
-  margin-right: auto;
-}
-
-main #right-container #pagination #pagination-list li button {
-  min-width: 44pt;
-  min-height: 44pt;
-  padding: 8pt;
+main #right-container #pagination .pagination-button {
+  width: 33pt;
+  min-width: 33pt;
+  height: 33pt;
+  min-height: 33pt;
 }
 
 main #right-container #pagination #pagination-list li button.current:enabled,
@@ -377,9 +369,11 @@ main #right-container #search-results ol li .lines-peek span {
     font-size: 1rem;
   }
 
-  main #right-container #pagination #pagination-list li button {
-    min-width: 33pt;
-    min-height: 33pt;
-    padding: 6pt;
+  main #right-container #pagination {
+    gap: 6pt;
+  }
+
+  main #right-container #pagination #pagination-list {
+    gap: 6pt;
   }
 }

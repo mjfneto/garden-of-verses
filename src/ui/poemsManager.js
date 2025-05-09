@@ -16,7 +16,7 @@ import {
   authorFilterOptions,
   allAuthorNames,
   firstAuthorCheckboxContainer,
-  paginationList,
+  pagination,
 } from './domElements.js'
 
 let cachedLinesRegExp = null
@@ -72,7 +72,7 @@ export async function loadPoems(params) {
 
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
-      clearElement(paginationList)
+      clearElement(pagination)
 
       switch (data.status) {
         case 404:
@@ -90,7 +90,7 @@ export async function loadPoems(params) {
 
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
-      clearElement(paginationList)
+      clearElement(pagination)
 
       console.warn('Data in unknown format:', data)
 
@@ -121,10 +121,10 @@ export function updatePoems() {
 
   state.totalPages = paginated.length
 
-  clearElement(paginationList)
+  clearElement(pagination)
   paginated.length && insertPaginationButtons(paginated.length)
 
-  const currentPageButton = paginationList.querySelector(
+  const currentPageButton = pagination.querySelector(
     `[data-page="${currentPage}"]`
   )
   currentPageButton && currentPageButton.scrollIntoView({ inline: 'center' })
@@ -201,15 +201,17 @@ function insertAuthorCheckboxes() {
 }
 
 function insertPaginationButtons(length) {
-  let previousLi = document.createElement('li')
   let previousButton = document.createElement('button')
   previousButton.type = 'button'
   previousButton.dataset.page = 'previous'
   previousButton.ariaLabel = 'Previous page'
-  previousButton.textContent = 'Previous'
+  previousButton.classList.add('pagination-button')
+  previousButton.textContent = '\u2039' // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
 
-  previousLi.appendChild(previousButton)
-  paginationList.appendChild(previousLi)
+  pagination.appendChild(previousButton)
+
+  let paginationList = document.createElement('ul')
+  paginationList.id = 'pagination-list'
 
   for (let i = 1; i <= length; i += 1) {
     let li = document.createElement('li')
@@ -222,20 +224,22 @@ function insertPaginationButtons(length) {
     button.dataset.page = i
     button.type = 'button'
     button.ariaLabel = `Page ${i}`
+    button.classList.add('pagination-button')
     button.textContent = i
     li.appendChild(button)
     paginationList.appendChild(li)
   }
 
-  let nextLi = document.createElement('li')
+  pagination.appendChild(paginationList)
+
   let nextButton = document.createElement('button')
   nextButton.type = 'button'
   nextButton.dataset.page = 'next'
   nextButton.ariaLabel = 'Next page'
-  nextButton.textContent = 'Next'
+  nextButton.classList.add('pagination-button')
+  nextButton.textContent = '\u203a' // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
 
-  nextLi.appendChild(nextButton)
-  paginationList.appendChild(nextLi)
+  pagination.appendChild(nextButton)
 }
 
 export function handleCheckboxes(event) {
@@ -277,9 +281,9 @@ export function handlePagination(event) {
     }
   }
 
-  const allButtons = paginationList.querySelectorAll('[data-page]')
+  const allButtons = pagination.querySelectorAll('[data-page]')
   allButtons.forEach((btn) => btn.classList.remove('current'))
-  const currentButton = paginationList.querySelector(
+  const currentButton = pagination.querySelector(
     `[data-page="${state.currentPage}"]`
   )
   currentButton.classList.add('current')
