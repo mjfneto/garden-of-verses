@@ -127,7 +127,8 @@ export function updatePoems() {
   const currentPageButton = pagination.querySelector(
     `[data-page="${currentPage}"]`
   )
-  currentPageButton && currentPageButton.scrollIntoView({ inline: 'center' })
+  currentPageButton &&
+    currentPageButton.scrollIntoView({ block: 'nearest', inline: 'center' })
 
   const currentIndex = currentPage - 1
   clearElement(searchResults)
