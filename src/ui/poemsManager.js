@@ -113,11 +113,11 @@ export async function loadPoems(params) {
 }
 
 export function updatePoems() {
-  const { currentPage, pageSize } = state
-
   const filtered = filterPoems(cloneViaJson(state.originalPoems))
   const sorted = sortPoems(filtered)
-  const paginated = batchArray(sorted, pageSize)
+  const paginated = batchArray(sorted, state.pageSize)
+
+  if (state.currentPage > paginated.length) state.currentPage = 1
 
   state.totalPages = paginated.length
 
@@ -125,14 +125,14 @@ export function updatePoems() {
   paginated.length && insertPaginationButtons(paginated)
 
   const currentPageButton = pagination.querySelector(
-    `[data-page="${currentPage}"]`
+    `[data-page="${state.currentPage}"]`
   )
   currentPageButton &&
     currentPageButton.scrollIntoView({ block: 'nearest', inline: 'center' })
 
-  const currentIndex = currentPage - 1
+  const currentIndex = state.currentPage - 1
   clearElement(searchResults)
-  showSearchResults(paginated[currentIndex], currentIndex * pageSize + 1)
+  showSearchResults(paginated[currentIndex], currentIndex * state.pageSize + 1)
 
   renderCount(
     filtered.length === 0
@@ -246,8 +246,9 @@ function insertPaginationButtons(pages) {
   divInterval.id = 'pagination-interval'
   divInterval.ariaLive = 'polite'
   let pInterval = document.createElement('p')
-  const startNum = (currentPage - 1) * pageSize + 1
-  const endNum = startNum + pages[currentPage - 1].length - 1
+  const currentIndex = currentPage - 1
+  const startNum = currentIndex * pageSize + 1
+  const endNum = startNum + pages[currentIndex].length - 1
   pInterval.innerHTML = `Showing poems <strong>${startNum}</strong> through <strong>${endNum}</strong>`
   divInterval.appendChild(pInterval)
 
