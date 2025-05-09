@@ -122,7 +122,7 @@ export function updatePoems() {
   state.totalPages = paginated.length
 
   clearElement(pagination)
-  paginated.length && insertPaginationButtons(paginated.length)
+  paginated.length && insertPaginationButtons(paginated)
 
   const currentPageButton = pagination.querySelector(
     `[data-page="${currentPage}"]`
@@ -201,7 +201,7 @@ function insertAuthorCheckboxes() {
   authorFilterOptions.insertAdjacentHTML('beforeend', checkboxes)
 }
 
-function insertPaginationButtons(length) {
+function insertPaginationButtons(pages) {
   let previousButton = document.createElement('button')
   previousButton.type = 'button'
   previousButton.dataset.page = 'previous'
@@ -214,7 +214,7 @@ function insertPaginationButtons(length) {
   let paginationList = document.createElement('ul')
   paginationList.id = 'pagination-list'
 
-  for (let i = 1; i <= length; i += 1) {
+  for (let i = 1; i <= pages.length; i += 1) {
     let li = document.createElement('li')
     let button = document.createElement('button')
 
@@ -240,7 +240,19 @@ function insertPaginationButtons(length) {
   nextButton.classList.add('pagination-button')
   nextButton.textContent = '\u203a' // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
 
+  const { currentPage, pageSize } = state
+
+  let divInterval = document.createElement('div')
+  divInterval.id = 'pagination-interval'
+  divInterval.ariaLive = 'polite'
+  let pInterval = document.createElement('p')
+  const startNum = (currentPage - 1) * pageSize + 1
+  const endNum = startNum + pages[currentPage - 1].length - 1
+  pInterval.innerHTML = `Showing poems <strong>${startNum}</strong> through <strong>${endNum}</strong>`
+  divInterval.appendChild(pInterval)
+
   pagination.appendChild(nextButton)
+  pagination.appendChild(divInterval)
 }
 
 export function handleCheckboxes(event) {

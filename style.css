@@ -259,10 +259,12 @@ main #right-container #result-count.error {
 
 main #right-container #pagination {
   display: flex;
+  flex-wrap: wrap;
   gap: 8pt;
 }
 
 main #right-container #pagination #pagination-list {
+  flex: 1;
   display: flex;
   gap: 8pt;
   list-style: none;
@@ -282,6 +284,13 @@ main #right-container #pagination #pagination-list li button.current:enabled,
 main #right-container #pagination #pagination-list li button:enabled:hover {
   color: white;
   background-color: gray;
+}
+
+main #right-container #pagination #pagination-interval {
+  flex: 100%;
+  padding: 0.25rem;
+  text-align: center;
+  background: gainsboro;
 }
 
 main #right-container #search-results {
