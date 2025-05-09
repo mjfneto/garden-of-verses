@@ -281,7 +281,9 @@ main #right-container #pagination #pagination-list li:last-child {
 }
 
 main #right-container #pagination #pagination-list li button {
-  padding: 0.25rem;
+  min-width: 44pt;
+  min-height: 44pt;
+  padding: 8pt;
 }
 
 main #right-container #pagination #pagination-list li button.current:enabled,
@@ -373,5 +375,11 @@ main #right-container #search-results ol li .lines-peek span {
 @media screen and (min-width: 768px) {
   html {
     font-size: 1rem;
+  }
+
+  main #right-container #pagination #pagination-list li button {
+    min-width: 33pt;
+    min-height: 33pt;
+    padding: 6pt;
   }
 }
