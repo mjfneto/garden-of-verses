@@ -25,6 +25,49 @@ export function randomNotFoundMsg() {
 }
 
 /**
+ * Splits an array into "compartments" (subarrays) of a specified maximum size.
+ *
+ * @template T
+ * @param {T[]} array - The original array to be split.
+ * @param {number} [size=50] - The maximum size of each compartment. Must be a positive integer.
+ * @returns {T[][]} An array of subarrays, each containing up to `size` elements.
+ *
+ * @throws {TypeError} If `array` is not an Array or if `size` is not a number.
+ * @throws {RangeError} If `size` is not an integer greater than zero.
+ *
+ * @example
+ * // returns [[1, 2, 3], [4, 5, 6], [7]]
+ * batchArray([1, 2, 3, 4, 5, 6, 7], 3);
+ *
+ * @example
+ * // returns []
+ * batchArray([], 10);
+ */
+export function batchArray(array, size = 50) {
+  // Type validations
+  if (!Array.isArray(array)) {
+    throw new TypeError('First argument must be an Array.')
+  }
+  if (typeof size !== 'number' || Number.isNaN(size)) {
+    throw new TypeError('Size must be a number.')
+  }
+
+  // Value validation
+  if (!Number.isInteger(size) || size <= 0) {
+    throw new RangeError('Size must be an integer greater than zero.')
+  }
+
+  const compartments = []
+
+  // Iterate through the array in steps of `size` and slice
+  for (let start = 0; start < array.length; start += size) {
+    compartments.push(array.slice(start, start + size))
+  }
+
+  return compartments
+}
+
+/**
  * @see The implementation and documentation were generated/assisted by Google Gemini / Programming Partner.
  *
  * Creates a deep copy of a JSON-serializable value using JSON.parse(JSON.stringify()).

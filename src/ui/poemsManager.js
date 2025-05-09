@@ -7,7 +7,7 @@ import {
   toggleAccordion,
   clearAfter,
 } from './general.js'
-import { cloneViaJson, randomNotFoundMsg } from '../utils/utils.js'
+import { cloneViaJson, batchArray, randomNotFoundMsg } from '../utils/utils.js'
 import {
   searchForm,
   searchResults,
@@ -16,13 +16,18 @@ import {
   authorFilterOptions,
   allAuthorNames,
   firstAuthorCheckboxContainer,
+  pagination,
 } from './domElements.js'
 
 let cachedLinesRegExp = null
 let cachedSearchTerm = ''
 
-let poems = []
-let poemsClone = []
+let state = {
+  originalPoems: [],
+  currentPage: 1,
+  totalPages: 0,
+  pageSize: 50,
+}
 
 /**
  * Extract class names into constants.
@@ -48,21 +53,26 @@ export async function loadPoems(params) {
     allAuthorNames.checked = true
 
     if (data instanceof Array) {
-      poems = data
-      poemsClone = cloneViaJson(poems)
+      state.originalPoems = data
+      state.currentPage = 1
+      state.totalPages = 0
 
-      renderCount({ count: poems.length, status: STATUS.SUCCESS })
+      renderCount({ count: state.originalPoems.length, status: STATUS.SUCCESS })
+
       clearAfter(firstAuthorCheckboxContainer)
       insertAuthorCheckboxes()
-      clearElement(searchResults)
-      sortPoems()
-      showSearchResults()
+
       enableForm(listControlsForm)
+
+      updatePoems()
     } else if (typeof data === 'object' && data !== null) {
-      poems = []
-      poemsClone = []
+      state.originalPoems = []
+      state.currentPage = 1
+      state.totalPages = 0
+
       clearAfter(firstAuthorCheckboxContainer)
       clearElement(searchResults)
+      clearElement(pagination)
 
       switch (data.status) {
         case 404:
@@ -74,15 +84,27 @@ export async function loadPoems(params) {
 
       disableForm(listControlsForm)
     } else {
-      poems = []
-      poemsClone = []
+      state.originalPoems = []
+      state.currentPage = 1
+      state.totalPages = 0
+
+      clearAfter(firstAuthorCheckboxContainer)
+      clearElement(searchResults)
+      clearElement(pagination)
+
       console.warn('Data in unknown format:', data)
+
       disableForm(listControlsForm)
     }
 
     enableForm(searchForm)
   } catch (error) {
     console.log(error)
+
+    state.originalPoems = []
+    state.currentPage = 1
+    state.totalPages = 0
+
     renderCount({
       text: 'Oops—something went wrong. Try again!',
       status: STATUS.ERROR,
@@ -90,42 +112,202 @@ export async function loadPoems(params) {
   }
 }
 
-/**
- * Renders the count area in one place.
- *
- * @param {Object} options
- * @param {'idle'|'loading'|'error'|'success'} options.status
- * @param {string} [options.text]     // for idle/loading/error
- * @param {number} [options.count]    // for success
- * @param {string} [options.postfix]  // optional custom suffix
- */
-function renderCount({ status, text = '', count = 0, postfix = '' }) {
-  resultCount.className = '' // reset
-  resultCount.classList.add(status) // e.g. 'loading', 'error', 'success'
-  resultCount.textContent = '' // clear existing
+export function updatePoems() {
+  const filtered = filterPoems(cloneViaJson(state.originalPoems))
+  const sorted = sortPoems(filtered)
+  const paginated = batchArray(sorted, state.pageSize)
 
-  if (status === 'success') {
-    const numberEl = document.createElement('strong')
-    numberEl.id = 'result-number'
-    numberEl.textContent = count
-    const label = `${
-      postfix ||
-      ` poetic gem${
-        count > 1 ? 's' : ''
-      }  unearthed—time to get lost in the lines!`
-    }`
-    resultCount.append(numberEl, document.createTextNode(label))
+  if (state.currentPage > paginated.length) state.currentPage = 1
+
+  state.totalPages = paginated.length
+
+  clearElement(pagination)
+  paginated.length && insertPaginationButtons(paginated)
+
+  const currentPageButton = pagination.querySelector(
+    `[data-page="${state.currentPage}"]`
+  )
+  currentPageButton &&
+    currentPageButton.scrollIntoView({ block: 'nearest', inline: 'center' })
+
+  const currentIndex = state.currentPage - 1
+  clearElement(searchResults)
+  showSearchResults(paginated[currentIndex], currentIndex * state.pageSize + 1)
+
+  renderCount(
+    filtered.length === 0
+      ? {
+          text: 'No filters, no rhymes—tick a box to unleash the poetry!',
+          status: STATUS.ERROR,
+        }
+      : { count: filtered.length, status: STATUS.SUCCESS }
+  )
+}
+
+function filterPoems(poems) {
+  const listControlsFormData = new FormData(listControlsForm)
+  const authorFilters = listControlsFormData
+    .getAll('authorFilter')
+    .filter((author) => author !== 'All')
+
+  return poems.filter(({ author }) => authorFilters.includes(author))
+}
+
+function sortPoems(poems) {
+  const listControlsFormData = new FormData(listControlsForm)
+  const sortCriteria = listControlsFormData.get('sortCriteria')
+  const sortDirection = listControlsFormData.get('sortDirection')
+
+  if (sortDirection === 'asc' || sortDirection === 'desc') {
+    poems.sort(function (a, b) {
+      if (sortCriteria === 'title' || sortCriteria === 'author') {
+        const stringA = a[sortCriteria]
+        const stringB = b[sortCriteria]
+
+        return sortDirection === 'asc'
+          ? stringA.localeCompare(stringB)
+          : stringB.localeCompare(stringA)
+      }
+
+      if (sortCriteria === 'linecount') {
+        const x = Number(a[sortCriteria])
+        const y = Number(b[sortCriteria])
+
+        return sortDirection === 'asc' ? x - y : y - x
+      }
+    })
+  }
+
+  return poems
+}
+
+function insertAuthorCheckboxes() {
+  const authors = state.originalPoems
+    .map(({ author }) => author)
+    .filter((author, index, array) => array.indexOf(author) === index)
+    .sort((a, b) => a.localeCompare(b))
+
+  let checkboxes = authors
+    .map(function (author, index) {
+      return `
+          <div class="author-checkbox-container">
+            <label for="author-name-${index}">${author}</label>
+            <input checked type="checkbox" id="author-name-${index}" class="author-checkbox" name="authorFilter" value="${author}" />
+          </div>
+        `
+    })
+    .join('')
+
+  authorFilterOptions.insertAdjacentHTML('beforeend', checkboxes)
+}
+
+function insertPaginationButtons(pages) {
+  let previousButton = document.createElement('button')
+  previousButton.type = 'button'
+  previousButton.dataset.page = 'previous'
+  previousButton.ariaLabel = 'Previous page'
+  previousButton.classList.add('pagination-button')
+  previousButton.textContent = '\u2039' // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+
+  pagination.appendChild(previousButton)
+
+  let paginationList = document.createElement('ol')
+  paginationList.id = 'pagination-list'
+
+  for (let i = 1; i <= pages.length; i += 1) {
+    let li = document.createElement('li')
+    let button = document.createElement('button')
+
+    if (i === state.currentPage) {
+      button.classList.add('current')
+      button.ariaCurrent = 'page'
+    }
+
+    button.dataset.page = i
+    button.type = 'button'
+    button.classList.add('pagination-button')
+    button.textContent = i
+    li.appendChild(button)
+    paginationList.appendChild(li)
+  }
+
+  pagination.appendChild(paginationList)
+
+  let nextButton = document.createElement('button')
+  nextButton.type = 'button'
+  nextButton.dataset.page = 'next'
+  nextButton.ariaLabel = 'Next page'
+  nextButton.classList.add('pagination-button')
+  nextButton.textContent = '\u203a' // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+
+  const { currentPage, pageSize } = state
+
+  let divInterval = document.createElement('div')
+  divInterval.id = 'pagination-interval'
+  divInterval.ariaLive = 'polite'
+  let pInterval = document.createElement('p')
+  const currentIndex = currentPage - 1
+  const startNum = currentIndex * pageSize + 1
+  const endNum = startNum + pages[currentIndex].length - 1
+  pInterval.innerHTML = `Showing poems <strong>${startNum}</strong> through <strong>${endNum}</strong>`
+  divInterval.appendChild(pInterval)
+
+  pagination.appendChild(nextButton)
+  pagination.appendChild(divInterval)
+}
+
+export function handleCheckboxes(event) {
+  const isAuthorFilter = event.target.name === 'authorFilter'
+
+  if (!isAuthorFilter) return
+
+  const authorCheckboxes = Array.from(
+    listControlsForm.querySelectorAll('.author-checkbox')
+  )
+
+  if (event.target === allAuthorNames) {
+    authorCheckboxes.forEach(
+      (checkbox) => (checkbox.checked = allAuthorNames.checked)
+    )
   } else {
-    // idle / loading / error all go here
-    resultCount.textContent = text
+    allAuthorNames.checked = authorCheckboxes.every(
+      (checkbox) => checkbox.checked
+    )
   }
 }
 
-function showSearchResults() {
+export function handlePagination(event) {
+  const button = event.target
+
+  const { page } = button.dataset
+  const { totalPages } = state
+
+  if (page === 'previous') {
+    state.currentPage =
+      state.currentPage === 1 ? totalPages : state.currentPage - 1
+  } else if (page === 'next') {
+    state.currentPage =
+      state.currentPage === totalPages ? 1 : state.currentPage + 1
+  } else {
+    const pageNum = Number(page)
+    if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+      state.currentPage = pageNum
+    }
+  }
+
+  const allButtons = pagination.querySelectorAll('[data-page]')
+  allButtons.forEach((btn) => btn.classList.remove('current'))
+  const currentButton = pagination.querySelector(
+    `[data-page="${state.currentPage}"]`
+  )
+  currentButton.classList.add('current')
+}
+
+function showSearchResults(page = [], start = 1) {
   const linesRegExp = getLinesRegExp()
   let listItemsHTML = ''
 
-  for (const { title, author, linecount, lines } of poemsClone) {
+  for (const { title, author, linecount, lines } of page) {
     let matchesHTML = ''
 
     if (searchFormEntries.lines) {
@@ -164,6 +346,7 @@ function showSearchResults() {
   }
 
   let ol = document.createElement('ol')
+  ol.start = start
   ol.insertAdjacentHTML('beforeend', listItemsHTML)
   searchResults.appendChild(ol)
 
@@ -174,92 +357,34 @@ function showSearchResults() {
   }
 }
 
-function filterPoems(formData = new FormData(listControlsForm)) {
-  const authorFilters = formData
-    .getAll('authorFilter')
-    .filter((author) => author !== 'All')
+/**
+ * Renders the count area in one place.
+ *
+ * @param {Object} options
+ * @param {'idle'|'loading'|'error'|'success'} options.status
+ * @param {string} [options.text]     // for idle/loading/error
+ * @param {number} [options.count]    // for success
+ * @param {string} [options.postfix]  // optional custom suffix
+ */
+function renderCount({ status, text = '', count = 0, postfix = '' }) {
+  resultCount.className = '' // reset
+  resultCount.classList.add(status) // e.g. 'loading', 'error', 'success'
+  resultCount.textContent = '' // clear existing
 
-  poemsClone = cloneViaJson(poems).filter(({ author }) =>
-    authorFilters.includes(author)
-  )
-}
-
-function sortPoems(formData = new FormData(listControlsForm)) {
-  const sortCriteria = formData.get('sortCriteria')
-  const sortDirection = formData.get('sortDirection')
-
-  if (sortDirection === 'asc' || sortDirection === 'desc') {
-    poemsClone.sort(function (a, b) {
-      if (sortCriteria === 'title' || sortCriteria === 'author') {
-        const stringA = a[sortCriteria]
-        const stringB = b[sortCriteria]
-
-        return sortDirection === 'asc'
-          ? stringA.localeCompare(stringB)
-          : stringB.localeCompare(stringA)
-      }
-
-      if (sortCriteria === 'linecount') {
-        const x = Number(a[sortCriteria])
-        const y = Number(b[sortCriteria])
-
-        return sortDirection === 'asc' ? x - y : y - x
-      }
-    })
-  }
-}
-
-export function updatePoems() {
-  filterPoems()
-  sortPoems()
-  clearElement(searchResults)
-  showSearchResults()
-  if (poemsClone.length === 0) {
-    renderCount({
-      text: 'No filters, no rhymes—tick a box to unleash the poetry!',
-      status: STATUS.ERROR,
-    })
+  if (status === 'success') {
+    const numberEl = document.createElement('strong')
+    numberEl.id = 'result-number'
+    numberEl.textContent = count
+    const label = `${
+      postfix ||
+      ` poetic gem${
+        count > 1 ? 's' : ''
+      }  unearthed—time to get lost in the lines!`
+    }`
+    resultCount.append(numberEl, document.createTextNode(label))
   } else {
-    renderCount({ count: poemsClone.length, status: STATUS.SUCCESS })
-  }
-}
-
-function insertAuthorCheckboxes() {
-  const authors = poemsClone
-    .map(({ author }) => author)
-    .filter((author, index, array) => array.indexOf(author) === index)
-
-  let checkboxes = authors
-    .map(function (author, index) {
-      return `
-          <div class="author-checkbox-container">
-            <label for="author-name-${index}">${author}</label>
-            <input checked type="checkbox" id="author-name-${index}" class="author-checkbox" name="authorFilter" value="${author}" />
-          </div>
-        `
-    })
-    .join('')
-
-  authorFilterOptions.insertAdjacentHTML('beforeend', checkboxes)
-}
-
-export function handleCheckboxes(event) {
-  const isAuthorFilter = event.target.name === 'authorFilter'
-
-  if (!isAuthorFilter) return
-
-  const authorCheckboxes = Array.from(
-    listControlsForm.querySelectorAll('.author-checkbox')
-  )
-
-  if (event.target === allAuthorNames) {
-    authorCheckboxes.forEach(
-      (checkbox) => (checkbox.checked = allAuthorNames.checked)
-    )
-  } else {
-    allAuthorNames.checked = authorCheckboxes.every(
-      (checkbox) => checkbox.checked
-    )
+    // idle / loading / error all go here
+    resultCount.textContent = text
   }
 }
 
