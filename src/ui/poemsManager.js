@@ -6,6 +6,8 @@ import {
   clearElement,
   toggleAccordion,
   clearAfter,
+  openModal,
+  closeModal,
 } from './general.js'
 import { cloneViaJson, batchArray, randomNotFoundMsg } from '../utils/utils.js'
 import {
@@ -17,6 +19,9 @@ import {
   allAuthorNames,
   firstAuthorCheckboxContainer,
   pagination,
+  modal,
+  closeModalBtn,
+  modalContent,
 } from './domElements.js'
 
 let cachedLinesRegExp = null
@@ -307,7 +312,9 @@ function showSearchResults(page = [], start = 1) {
   const linesRegExp = getLinesRegExp()
   let listItemsHTML = ''
 
-  for (const { title, author, linecount, lines } of page) {
+  for (let i = 0; i < page.length; i += 1) {
+    const { title, author, linecount, lines } = page[i]
+
     let matchesHTML = ''
 
     if (searchFormEntries.lines) {
@@ -330,8 +337,24 @@ function showSearchResults(page = [], start = 1) {
           <p class="search-result-title">${title}</p>
           <p class="search-result-author">${author}</p>
           <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
-          <button type="button" class="accordion matching-lines">Matching lines</button>
-          <ul class="panel lines-peek">${matchesHTML}</ul>
+          <div class="search-result-controls">
+            <button 
+              type="button" 
+              aria-haspopup="dialog" 
+              aria-controls="modal" 
+              class="open-modal">
+              Read
+            </button>
+
+            <button 
+              type="button" 
+              class="accordion matching-lines" 
+              aria-expanded="false" 
+              aria-controls="lines-peek-${i}">
+              Matching lines
+            </button>
+          </div>
+          <ul id="lines-peek-${i}" class="panel lines-peek">${matchesHTML}</ul>
         </li>
       `
     } else {
@@ -340,6 +363,15 @@ function showSearchResults(page = [], start = 1) {
           <p class="search-result-title">${title}</p>
           <p class="search-result-author">${author}</p>
           <p class="line-count"><data value="${linecount}">Lines: ${linecount}</data></p>
+          <div class="search-result-controls">
+            <button 
+              type="button" 
+              aria-haspopup="dialog" 
+              aria-controls="modal" 
+              class="open-modal">
+              Read
+            </button>
+          </div>
         </li>
       `
     }
@@ -351,10 +383,54 @@ function showSearchResults(page = [], start = 1) {
   searchResults.appendChild(ol)
 
   if (searchFormEntries.lines) {
-    ol.querySelectorAll('.accordion').forEach(function (button) {
-      button.addEventListener('click', toggleAccordion)
+    ol.querySelectorAll('.accordion').forEach(function (button, index) {
+      button.addEventListener('click', (event) =>
+        toggleAccordion(event.target, index)
+      )
     })
   }
+
+  ol.querySelectorAll('.open-modal').forEach(function (button, index) {
+    button.addEventListener('click', () => {
+      clearElement(modalContent)
+      openModal()
+      closeModalBtn.addEventListener('click', closeModal)
+      modalContent.scroll({ top: 0 })
+      renderModalContent(page[index], index)
+    })
+  })
+}
+
+function renderModalContent({ title, author, linecount, lines }, index) {
+  let h2 = document.createElement('h2')
+  h2.id = `modal-title-${index}`
+  h2.textContent = title
+
+  modal.setAttribute('aria-labelledby', h2.id)
+
+  modalContent.appendChild(h2)
+
+  let poemInfo = document.createElement('div')
+  poemInfo.classList.add('poem-info')
+  poemInfo.insertAdjacentHTML(
+    'beforeend',
+    `
+      <p class="poem-author">${author}</p>
+      <p class="poem-linecount">Lines: <strong>${linecount}</strong></p>
+    `
+  )
+
+  modalContent.appendChild(poemInfo)
+
+  let linesHTML = lines.reduce((html, line, index) => {
+    return (html += `
+      <div class="poem-line">
+        <span class="line-number">(${index + 1})</span> ${line}
+      </div>
+    `)
+  }, '')
+
+  modalContent.insertAdjacentHTML('beforeend', linesHTML)
 }
 
 /**

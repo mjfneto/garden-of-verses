@@ -1,3 +1,5 @@
+import { closeModalBtn, modal, searchResults } from './domElements.js'
+
 export function clearElement(element) {
   while (element.firstChild) {
     element.firstChild.remove()
@@ -22,14 +24,27 @@ export function enableForm(form) {
   }
 }
 
-export function toggleAccordion() {
-  this.classList.toggle('active')
+export function toggleAccordion(accordion, index) {
+  accordion.classList.toggle('active')
 
-  let panel = this.nextElementSibling
+  let panel = searchResults.querySelector(`#lines-peek-${index}`)
 
   if (panel.style.maxHeight) {
     panel.style.maxHeight = null
+    panel.style.padding = '0px'
   } else {
     panel.style.maxHeight = panel.scrollHeight + 'px'
+    panel.style.padding = '0.25rem 0px'
   }
+}
+
+export function openModal() {
+  document.body.classList.add('modal-open')
+  modal.classList.add('active')
+}
+
+export function closeModal() {
+  document.body.classList.remove('modal-open')
+  modal.classList.remove('active')
+  closeModalBtn.removeEventListener('click', closeModal)
 }

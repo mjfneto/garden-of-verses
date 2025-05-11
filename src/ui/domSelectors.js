@@ -7,4 +7,7 @@ export const SELECTORS = {
   resultCount: '#result-count',
   authorCheckboxContainers: '.author-checkbox-container',
   pagination: '#pagination',
+  modal: '#modal',
+  closeModal: '#close-modal',
+  modalContent: '#modal-content',
 }

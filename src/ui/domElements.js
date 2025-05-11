@@ -19,3 +19,6 @@ export const firstAuthorCheckboxContainer = document.querySelector(
   SELECTORS.authorCheckboxContainers
 )
 export const pagination = document.querySelector(SELECTORS.pagination)
+export const modal = document.querySelector(SELECTORS.modal)
+export const closeModalBtn = document.querySelector(SELECTORS.closeModal)
+export const modalContent = document.querySelector(SELECTORS.modalContent)
