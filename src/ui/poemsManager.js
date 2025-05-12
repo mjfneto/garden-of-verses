@@ -410,27 +410,51 @@ function renderModalContent({ title, author, linecount, lines }, index) {
 
   modalContent.appendChild(h2)
 
-  let poemInfo = document.createElement('div')
-  poemInfo.classList.add('poem-info')
-  poemInfo.insertAdjacentHTML(
+  modalContent.insertAdjacentHTML(
     'beforeend',
     `
+    <div class="poem-info">
       <p class="poem-author">${author}</p>
       <p class="poem-linecount">Lines: <strong>${linecount}</strong></p>
+    </div>
+    <div id="poem-container"></div>
     `
   )
 
-  modalContent.appendChild(poemInfo)
+  const poemContainer = modalContent.querySelector('#poem-container')
 
-  let linesHTML = lines.reduce((html, line, index) => {
-    return (html += `
-      <div class="poem-line">
-        <span class="line-number">(${index + 1})</span> ${line}
-      </div>
-    `)
-  }, '')
+  renderChunk(lines, poemContainer)
+}
 
-  modalContent.insertAdjacentHTML('beforeend', linesHTML)
+/**
+ * Incrementally renders an array of text lines into the DOM in small batches,
+ * yielding between batches to keep the UI responsive.
+ *
+ * @param {string[]} lines - Array of strings to render as individual elements.
+ * @param {HTMLElement} container - The parent element to append the rendered lines to.
+ * @param {number} [start=0] - Index of the first line to render in this call.
+ * @param {number} [chunkSize=100] - Maximum number of lines to render per animation frame.
+ */
+function renderChunk(lines, container, start = 0, chunkSize = 100) {
+  // Determine the slice of lines to render in this batch
+  const end = Math.min(start + chunkSize, lines.length)
+
+  // Create and append each line element for this batch
+  for (let i = start; i < end; i++) {
+    const poemLine = document.createElement('div')
+    poemLine.classList.add('poem-line')
+    poemLine.innerHTML = `<span class="poem-line-number">(${i + 1})</span> ${
+      lines[i]
+    }`
+    container.appendChild(poemLine)
+  }
+
+  // If there are more lines left, schedule the next batch on the next frame
+  if (end < lines.length) {
+    requestAnimationFrame(() => {
+      renderChunk(lines, container, end, chunkSize)
+    })
+  }
 }
 
 /**

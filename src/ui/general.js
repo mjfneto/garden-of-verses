@@ -1,4 +1,9 @@
-import { closeModalBtn, modal, searchResults } from './domElements.js'
+import {
+  closeModalBtn,
+  modal,
+  modalContent,
+  searchResults,
+} from './domElements.js'
 
 export function clearElement(element) {
   while (element.firstChild) {
@@ -44,6 +49,7 @@ export function openModal() {
 }
 
 export function closeModal() {
+  clearElement(modalContent)
   document.body.classList.remove('modal-open')
   modal.classList.remove('active')
   closeModalBtn.removeEventListener('click', closeModal)
