@@ -478,4 +478,10 @@ main #right-container #search-results ol li .lines-peek span {
   #modal.active {
     flex-direction: column;
   }
+
+  #modal #modal-controls button {
+    min-width: 33pt;
+    min-height: 33pt;
+    padding: 6pt;
+  }
 }
