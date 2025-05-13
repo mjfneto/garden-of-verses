@@ -20,5 +20,8 @@ export const firstAuthorCheckboxContainer = document.querySelector(
 )
 export const pagination = document.querySelector(SELECTORS.pagination)
 export const modal = document.querySelector(SELECTORS.modal)
+export const modalControls = document.querySelector(SELECTORS.modalControls)
 export const closeModalBtn = document.querySelector(SELECTORS.closeModal)
 export const modalContent = document.querySelector(SELECTORS.modalContent)
+export const poemInfo = document.querySelector(SELECTORS.poemInfo)
+export const poemContainer = document.querySelector(SELECTORS.poemContainer)

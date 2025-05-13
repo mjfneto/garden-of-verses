@@ -8,6 +8,9 @@ export const SELECTORS = {
   authorCheckboxContainers: '.author-checkbox-container',
   pagination: '#pagination',
   modal: '#modal',
+  modalControls: '#modal-controls',
   closeModal: '#close-modal',
   modalContent: '#modal-content',
+  poemInfo: '#poem-info',
+  poemContainer: '#poem-container',
 }

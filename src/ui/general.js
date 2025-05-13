@@ -49,7 +49,6 @@ export function openModal() {
 }
 
 export function closeModal() {
-  clearElement(modalContent)
   document.body.classList.remove('modal-open')
   modal.classList.remove('active')
   closeModalBtn.removeEventListener('click', closeModal)

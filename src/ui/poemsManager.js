@@ -22,6 +22,9 @@ import {
   modal,
   closeModalBtn,
   modalContent,
+  modalControls,
+  poemInfo,
+  poemContainer,
 } from './domElements.js'
 
 let cachedLinesRegExp = null
@@ -392,7 +395,6 @@ function showSearchResults(page = [], start = 1) {
 
   ol.querySelectorAll('.open-modal').forEach(function (button, index) {
     button.addEventListener('click', () => {
-      clearElement(modalContent)
       openModal()
       closeModalBtn.addEventListener('click', closeModal)
       modalContent.scroll({ top: 0 })
@@ -402,27 +404,20 @@ function showSearchResults(page = [], start = 1) {
 }
 
 function renderModalContent({ title, author, linecount, lines }, index) {
-  let h2 = document.createElement('h2')
-  h2.id = `modal-title-${index}`
-  h2.textContent = title
+  const modalTitleId = `modal-title-${index}`
 
-  modal.setAttribute('aria-labelledby', h2.id)
+  modal.setAttribute('aria-labelledby', modalTitleId)
 
-  modalContent.appendChild(h2)
+  let poemTitle = modalControls.querySelector('h2')
+  poemTitle.id = modalTitleId
+  poemTitle.textContent = title
 
-  modalContent.insertAdjacentHTML(
-    'beforeend',
-    `
-    <div class="poem-info">
-      <p class="poem-author">${author}</p>
-      <p class="poem-linecount">Lines: <strong>${linecount}</strong></p>
-    </div>
-    <pre id="poem-container"></pre>
-    `
-  )
+  poemInfo.innerHTML = `
+    <p class="poem-author"><strong>Author:</strong> ${author}</p>
+    <p class="poem-linecount"><strong>Lines:</strong> ${linecount}</p>
+  `
 
-  const poemContainer = modalContent.querySelector('#poem-container')
-
+  poemContainer.setAttribute('aria-describedby', modalTitleId)
   poemContainer.textContent = lines.join('\n')
 }
 
