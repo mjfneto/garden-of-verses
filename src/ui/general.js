@@ -44,12 +44,21 @@ export function toggleAccordion(accordion, index) {
 }
 
 export function openModal() {
-  document.body.classList.add('modal-open')
-  modal.classList.add('active')
+  modal.show()
+  requestAnimationFrame(() => {
+    modal.classList.add('active')
+  })
 }
 
 export function closeModal() {
-  document.body.classList.remove('modal-open')
   modal.classList.remove('active')
-  closeModalBtn.removeEventListener('click', closeModal)
+
+  // Espera a transição terminar para fechar o modal
+  modal.addEventListener(
+    'transitionend',
+    () => {
+      modal.close()
+    },
+    { once: true }
+  )
 }
