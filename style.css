@@ -18,6 +18,10 @@ body {
   padding: 1rem;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 input,
 button {
   font-family: inherit;
@@ -29,16 +33,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.accordion {
-  position: relative;
-  width: 100%;
-  padding: 0.25rem;
-  border: none;
-  outline: none;
-  text-align: right;
-  cursor: pointer;
-}
-
 .accordion.active,
 .accordion:hover {
   color: white;
@@ -46,13 +40,10 @@ button:disabled {
 }
 
 .panel {
+  box-sizing: content-box;
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.2s ease;
-}
-
-.accordion.active + .panel {
-  padding: 0.25rem 0;
 }
 
 .visually-hidden {
@@ -320,17 +311,152 @@ main #right-container #search-results ol li p.line-count {
   font-size: 0.875rem;
 }
 
-main #right-container #search-results ol li button.matching-lines {
+main #right-container #search-results ol li .search-result-controls {
+  margin: 0.25rem 0;
+}
+
+main #right-container #search-results ol li .search-result-controls button {
+  min-width: 44pt;
+  min-height: 44pt;
+  padding: 8pt;
   font-size: 0.875rem;
 }
 
 main #right-container #search-results ol li .lines-peek {
-  text-align: center;
+  list-style: none;
   font-size: 0.875rem;
+}
+
+main #right-container #search-results ol li .lines-peek li {
+  text-align: center;
+}
+
+main #right-container #search-results ol li .lines-peek li + li {
+  margin-top: 0.25rem;
 }
 
 main #right-container #search-results ol li .lines-peek span {
   background-color: yellow;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal #modal-backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+}
+
+.modal .modal-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  width: 100%;
+  height: 100%;
+  max-width: 90ch;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1.5rem auto;
+  text-align: center;
+  background-color: white;
+}
+
+.modal .modal-container.opening {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.modal .modal-container.closing {
+  animation: fadeOutDown 0.5s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+.modal .modal-container .modal-controls {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 0 0;
+}
+
+.modal .modal-container .modal-controls button {
+  min-width: 44pt;
+  min-height: 44pt;
+  padding: 8pt;
+}
+
+.modal .modal-container .modal-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.modal .modal-container .modal-body .modal-header {
+  margin: 1rem 0;
+}
+
+.modal .modal-container .modal-body .poem-info {
+  margin: 1rem 0 2rem 0;
+  border-top: 1px dotted;
+  border-bottom: 1px dotted;
+}
+
+.modal .modal-container .modal-body .poem-info .poem-author {
+  margin: 1rem 0;
+}
+
+.modal .modal-container .modal-body .poem-info .poem-linecount {
+  margin: 1rem 0;
+}
+
+.modal .modal-container .modal-body section[aria-labelledby='poem-heading'] {
+  overflow-y: auto;
+}
+
+.modal
+  .modal-container
+  .modal-body
+  section[aria-labelledby='poem-heading']
+  pre {
+  text-align: left;
+  line-height: 2;
+  white-space: pre-wrap;
 }
 
 @media screen and (min-width: 50ch) {
@@ -384,5 +510,27 @@ main #right-container #search-results ol li .lines-peek span {
 
   main #right-container #pagination #pagination-list {
     gap: 6pt;
+  }
+
+  main #right-container #search-results ol li .search-result-controls button {
+    min-width: 33pt;
+    min-height: 33pt;
+    padding: 6pt;
+  }
+
+  .modal .modal-container {
+    flex-direction: column;
+    padding: 1rem 1rem 4rem 1rem;
+  }
+
+  .modal .modal-container .modal-controls {
+    justify-content: flex-end;
+    margin: 0 0 1rem 0;
+  }
+
+  .modal .modal-container .modal-controls button {
+    min-width: 33pt;
+    min-height: 33pt;
+    padding: 6pt;
   }
 }
