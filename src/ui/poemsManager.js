@@ -21,10 +21,7 @@ import {
   pagination,
   modal,
   closeModalBtn,
-  modalContent,
-  modalControls,
-  poemInfo,
-  poemContainer,
+  modalBody,
 } from './domElements.js'
 
 let cachedLinesRegExp = null
@@ -397,28 +394,35 @@ function showSearchResults(page = [], start = 1) {
     button.addEventListener('click', () => {
       openModal()
       closeModalBtn.addEventListener('click', closeModal)
-      modalContent.scroll({ top: 0 })
-      renderModalContent(page[index], index)
+      modalBody.scroll({ top: 0 })
+      renderPoem(page[index], index)
     })
   })
 }
 
-function renderModalContent({ title, author, linecount, lines }, index) {
+function renderPoem({ title, author, linecount, lines }, index) {
   const modalTitleId = `modal-title-${index}`
 
   modal.setAttribute('aria-labelledby', modalTitleId)
 
-  let poemTitle = modalControls.querySelector('h2')
-  poemTitle.id = modalTitleId
-  poemTitle.textContent = title
+  modalBody.insertAdjacentHTML(
+    'beforeend',
+    `
+      <header class="modal-header">
+        <h2 id="${modalTitleId}">${title}</h2>
+      </header>
 
-  poemInfo.innerHTML = `
-    <p class="poem-author"><strong>Author:</strong> ${author}</p>
-    <p class="poem-linecount"><strong>Lines:</strong> ${linecount}</p>
-  `
+      <section class="poem-info">
+        <p class="poem-author"><strong>Author:</strong> ${author}</p>
+        <p class="poem-linecount"><strong>Lines:</strong> ${linecount}</p>
+      </section>
 
-  poemContainer.setAttribute('aria-describedby', modalTitleId)
-  poemContainer.textContent = lines.join('\n')
+      <section aria-labelledby="poem-heading">
+        <h3 id="poem-heading" class="visually-hidden">Poem content</h3>
+        <pre aria-describedby="${modalTitleId}">${lines.join('\n')}</pre>
+    </section>
+    `
+  )
 }
 
 /**

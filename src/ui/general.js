@@ -1,7 +1,7 @@
 import {
-  closeModalBtn,
   modal,
-  modalContent,
+  modalBody,
+  modalContainer,
   searchResults,
 } from './domElements.js'
 
@@ -44,21 +44,25 @@ export function toggleAccordion(accordion, index) {
 }
 
 export function openModal() {
-  modal.show()
-  requestAnimationFrame(() => {
-    modal.classList.add('active')
-  })
+  modal.removeAttribute('hidden')
+  modal.classList.add('active')
+  modalContainer.classList.add('opening')
+
+  document.body.classList.add('modal-open') // avoid viewport scrolling
+
+  setTimeout(() => {
+    modalContainer.classList.remove('opening')
+  }, 500)
 }
 
 export function closeModal() {
-  modal.classList.remove('active')
+  modalContainer.classList.add('closing')
 
-  // Espera a transição terminar para fechar o modal
-  modal.addEventListener(
-    'transitionend',
-    () => {
-      modal.close()
-    },
-    { once: true }
-  )
+  setTimeout(() => {
+    modal.classList.remove('active')
+    modal.setAttribute('hidden', '')
+    modalContainer.classList.remove('closing')
+    document.body.classList.remove('modal-open')
+    clearElement(modalBody)
+  }, 500)
 }

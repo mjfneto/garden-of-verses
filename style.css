@@ -339,75 +339,121 @@ main #right-container #search-results ol li .lines-peek span {
   background-color: yellow;
 }
 
-#modal {
-  opacity: 0;
-  transform: translateY(-20px);
-  pointer-events: none;
-  transition: opacity 0.5s ease, transform 0.5s ease;
+.modal {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  border: none;
-  background: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
   z-index: 1000;
-  display: block;
 }
 
-#modal.active {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-#modal #modal-content {
+.modal.active {
   display: flex;
-  flex-direction: column;
+}
+
+.modal #modal-backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+}
+
+.modal .modal-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column-reverse;
   width: 100%;
   height: 100%;
   max-width: 90ch;
   padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1.5rem auto;
   text-align: center;
-  margin: 0 auto 1.5rem auto;
+  background-color: white;
 }
 
-#modal #modal-content #modal-controls {
-  flex-shrink: 0;
-  padding: 1rem;
+.modal .modal-container.opening {
+  animation: fadeInUp 0.5s ease-out forwards;
 }
 
-#modal #modal-content #modal-controls h2 {
-  margin: 1rem 0;
+.modal .modal-container.closing {
+  animation: fadeOutDown 0.5s ease-out forwards;
 }
 
-#modal #modal-content #modal-controls button {
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+.modal .modal-container .modal-controls {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0 0 0;
+}
+
+.modal .modal-container .modal-controls button {
   min-width: 44pt;
   min-height: 44pt;
   padding: 8pt;
 }
 
-#modal #modal-content #poem-info {
-  margin: 2rem 0;
-  border-top: 2px solid;
-  border-bottom: 2px solid;
+.modal .modal-container .modal-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
-#modal #modal-content #poem-info .poem-author {
+.modal .modal-container .modal-body .modal-header {
   margin: 1rem 0;
 }
 
-#modal #modal-content #poem-info .poem-linecount {
+.modal .modal-container .modal-body .poem-info {
+  margin: 1rem 0 2rem 0;
+  border-top: 1px dotted;
+  border-bottom: 1px dotted;
+}
+
+.modal .modal-container .modal-body .poem-info .poem-author {
   margin: 1rem 0;
 }
 
-#modal #modal-content section[aria-labelledby='poem-heading'] {
+.modal .modal-container .modal-body .poem-info .poem-linecount {
+  margin: 1rem 0;
+}
+
+.modal .modal-container .modal-body section[aria-labelledby='poem-heading'] {
   overflow-y: auto;
 }
 
-#modal #modal-content section[aria-labelledby='poem-heading'] #poem-container {
+.modal
+  .modal-container
+  .modal-body
+  section[aria-labelledby='poem-heading']
+  pre {
   text-align: left;
   line-height: 2;
   white-space: pre-wrap;
@@ -472,7 +518,17 @@ main #right-container #search-results ol li .lines-peek span {
     padding: 6pt;
   }
 
-  #modal #modal-content #modal-controls button {
+  .modal .modal-container {
+    flex-direction: column;
+    padding: 1rem 1rem 4rem 1rem;
+  }
+
+  .modal .modal-container .modal-controls {
+    justify-content: flex-end;
+    margin: 0 0 1rem 0;
+  }
+
+  .modal .modal-container .modal-controls button {
     min-width: 33pt;
     min-height: 33pt;
     padding: 6pt;

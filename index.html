@@ -174,23 +174,19 @@
       </aside>
     </main>
 
-    <dialog id="modal" aria-modal="true" role="dialog">
-      <article id="modal-content" role="document">
-        <header id="modal-controls">
-          <h2></h2>
+    <div class="modal" id="modal" aria-modal="true" role="dialog" hidden>
+      <div id="modal-backdrop" data-close-modal></div>
+
+      <div class="modal-container" role="document">
+        <div class="modal-controls">
           <button type="button" id="close-modal" aria-label="Close modal">
             ✕
           </button>
-        </header>
+        </div>
 
-        <section id="poem-info"></section>
-
-        <section aria-labelledby="poem-heading">
-          <h3 id="poem-heading" class="visually-hidden">Poem content</h3>
-          <pre id="poem-container"></pre>
-        </section>
-      </article>
-    </dialog>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
 
     <script type="module" src="index.js"></script>
   </body>
