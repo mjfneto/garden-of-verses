@@ -413,8 +413,8 @@ function renderPoem({ title, author, linecount, lines }, index) {
       </header>
 
       <section class="poem-info">
-        <p class="poem-author"><strong>Author:</strong> ${author}</p>
-        <p class="poem-linecount"><strong>Lines:</strong> ${linecount}</p>
+        <p class="poem-author"><strong>Author:</strong> <span title="${author}">${author}</span></p>
+        <p class="poem-linecount"><strong>Lines:</strong> <span>${linecount}</span></p>
       </section>
 
       <section aria-labelledby="poem-heading">
