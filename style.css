@@ -298,6 +298,7 @@ main #right-container #pagination #pagination-interval {
 
 main #right-container #search-results {
   padding: 1rem 1rem 1rem 0;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
