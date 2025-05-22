@@ -57,6 +57,19 @@ legend {
   transition: max-height 0.2s ease;
 }
 
+.bottom-white-shadow {
+  position: relative;
+}
+
+.bottom-white-shadow::after {
+  position: sticky;
+  bottom: 0;
+  content: '';
+  display: block;
+  box-shadow: 0 0.5rem 2rem 3rem white;
+  background-color: transparent;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -297,13 +310,16 @@ main #right-container #pagination #pagination-interval {
 }
 
 main #right-container #search-results {
+  display: flex;
+  flex-direction: column;
   padding: 1rem 1rem 1rem 0;
   max-height: 70vh;
   overflow-y: auto;
 }
 
 main #right-container #search-results ol {
-  padding-left: 0;
+  flex-grow: 1;
+  padding: 0 0 4rem 0;
   list-style-position: inside;
 }
 
@@ -441,7 +457,6 @@ main #right-container #search-results ol li .lines-peek span {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: 0 1rem;
 }
 
 .modal .modal-container .modal-body .modal-header h2 {
@@ -483,8 +498,9 @@ main #right-container #search-results ol li .lines-peek span {
   .modal-body
   section[aria-labelledby='poem-heading']
   pre {
-  text-align: left;
+  padding: 0 1rem 4rem 1rem;
   line-height: 2;
+  text-align: left;
   white-space: pre-wrap;
   font-family: 'Sono', monospace;
   font-optical-sizing: auto;
@@ -492,7 +508,7 @@ main #right-container #search-results ol li .lines-peek span {
 
 @media screen and (min-width: 50ch) {
   main #right-container #search-results ol {
-    padding-left: 3.75rem;
+    padding: 0 0 4rem 3.75rem;
     list-style-position: outside;
   }
 
