@@ -195,10 +195,11 @@ function insertAuthorCheckboxes() {
   let checkboxes = authors
     .map(function (author, index) {
       return `
-          <div class="author-checkbox-container">
-            <label for="author-name-${index}">${author}</label>
+          <label class="author-checkbox-container custom-input" for="author-name-${index}">
             <input checked type="checkbox" id="author-name-${index}" class="author-checkbox" name="authorFilter" value="${author}" />
-          </div>
+            <span class="input-visual"></span>
+            <span class="label-text">${author}</span>
+          </label>
         `
     })
     .join('')

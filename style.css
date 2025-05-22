@@ -3,9 +3,12 @@
   padding: 0;
 }
 
-html {
+:root {
   box-sizing: border-box;
   font-size: 0.875rem;
+
+  --custom-input-primary: #0285ff;
+  --custom-input-bg: #daeeff;
 }
 
 *,
@@ -42,6 +45,52 @@ legend {
 
 legend {
   font-style: italic;
+}
+
+.custom-input {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.5rem 0.75rem;
+}
+
+.custom-input input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+.custom-input .input-visual {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  content: '';
+  border: 1px solid gainsboro;
+  border-radius: 1rem;
+  transition: background-color, border-color 0.2s ease-out;
+}
+
+.custom-input .label-text {
+  color: gray;
+  font-weight: 400;
+  transition: color 0.2s ease-out;
+}
+
+.custom-input input:checked ~ .input-visual {
+  border-color: var(--custom-input-primary);
+  background-color: var(--custom-input-bg);
+}
+
+.custom-input input:checked ~ .input-visual ~ .label-text {
+  color: var(--custom-input-primary);
 }
 
 .accordion.active,
@@ -102,29 +151,31 @@ main {
   gap: 1rem;
 }
 
-main #left-container #search-form fieldset + fieldset,
+main #left-container #search-form #input-field label {
+  display: block;
+}
+
+main #left-container #search-form #input-field label + label {
+  margin: 0.75rem 0;
+}
+
+main #left-container #search-form #optional-filters,
 main #left-container #search-form button[type='submit'] {
   margin-top: 0.75rem;
+}
+
+main #left-container #search-form #optional-filters #number-inputs {
+  margin: 0.75rem 0;
 }
 
 main #left-container #search-form fieldset#input-field {
   padding: 0.25rem 0.75rem;
 }
 
-main #left-container #search-form label {
-  display: block;
-}
-
 main #left-container #search-form input,
 main #left-container #search-form button[type='submit'] {
   display: block;
   width: 100%;
-}
-
-main #left-container #search-form #input-field label,
-main #left-container #search-form label[for='random'],
-main #left-container #search-form #number-inputs {
-  margin: 0.75rem 0;
 }
 
 main #left-container #search-form #optional-filters {
@@ -229,6 +280,7 @@ main
   .author-checkbox-container:first-child {
   position: sticky;
   left: 0;
+  z-index: 1; /* important for .custom-input in the context of the author checkboxes */
   padding: 1rem;
   box-shadow: 0.5rem 0 0.5rem white;
   background-color: white;
