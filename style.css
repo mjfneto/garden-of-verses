@@ -456,6 +456,7 @@ main #right-container #search-results ol li .lines-peek span {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  padding: 0 1rem;
   overflow-y: auto;
 }
 
@@ -498,7 +499,7 @@ main #right-container #search-results ol li .lines-peek span {
   .modal-body
   section[aria-labelledby='poem-heading']
   pre {
-  padding: 0 1rem 4rem 1rem;
+  padding: 0 0 4rem 0;
   line-height: 2;
   text-align: left;
   white-space: pre-wrap;
