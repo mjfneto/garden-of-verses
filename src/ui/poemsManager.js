@@ -8,7 +8,7 @@ import {
   clearAfter,
   openModal,
   closeModal,
-} from './general.js'
+} from './poemsUI.js'
 import { cloneViaJson, batchArray, randomNotFoundMsg } from '../utils/utils.js'
 import {
   searchForm,

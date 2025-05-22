@@ -12,5 +12,7 @@ export {
   disableForm,
   enableForm,
   toggleAccordion,
+  openModal,
+  closeModal,
 } from './general.js'
 export { SELECTORS } from './domSelectors.js'
