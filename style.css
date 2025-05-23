@@ -414,6 +414,7 @@ main #right-container #pagination #pagination-list li button:enabled:hover {
 main #right-container #pagination #pagination-interval {
   flex: 100%;
   padding: 0.25rem;
+  border-radius: 0.25rem;
   text-align: center;
   font-weight: 700;
   color: gray;
