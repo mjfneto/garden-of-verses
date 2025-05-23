@@ -4,11 +4,21 @@
 }
 
 :root {
+  color: gray;
   box-sizing: border-box;
   font-size: 0.875rem;
 
   --custom-input-primary: #0285ff;
   --custom-input-bg: #daeeff;
+
+  --success-primary: #008000;
+  --success-bg: #ccffcc;
+
+  --loading-primary: #ffa500;
+  --loading-bg: #ffffcc;
+
+  --error-primary: #cc0000;
+  --error-bg: #ffcccc;
 }
 
 *,
@@ -27,10 +37,28 @@ body.modal-open {
   overflow: hidden;
 }
 
+::placeholder {
+  font-weight: 100;
+}
+
+fieldset {
+  border: 1px solid gainsboro;
+  border-radius: 0.25rem;
+}
+
 input,
+select {
+  border: 1px solid gainsboro;
+}
+
+input,
+select,
 button {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
   font-family: inherit;
   font-size: inherit;
+  color: inherit;
 }
 
 input:disabled,
@@ -38,13 +66,23 @@ button:disabled {
   cursor: not-allowed;
 }
 
+legend {
+  font-style: italic;
+}
+
 label,
 legend {
   font-weight: 200;
 }
 
-legend {
-  font-style: italic;
+button {
+  background-color: gainsboro;
+  border: 1px solid gainsboro;
+}
+
+button:hover {
+  border: 1px solid gray;
+  color: gray;
 }
 
 .custom-input {
@@ -74,23 +112,36 @@ legend {
   z-index: -1;
   content: '';
   border: 1px solid gainsboro;
-  border-radius: 1rem;
+  border-radius: 0.25rem;
   transition: background-color, border-color 0.2s ease-out;
 }
 
 .custom-input .label-text {
   color: gray;
-  font-weight: 400;
+  font-weight: 700;
   transition: color 0.2s ease-out;
 }
 
 .custom-input input:checked ~ .input-visual {
-  border-color: var(--custom-input-primary);
+  border-color: var(--custom-input-bg);
   background-color: var(--custom-input-bg);
+}
+
+.custom-input:has(input:disabled) {
+  cursor: not-allowed;
 }
 
 .custom-input input:checked ~ .input-visual ~ .label-text {
   color: var(--custom-input-primary);
+}
+
+.custom-input input:disabled ~ .input-visual {
+  border-color: #dfdfdf;
+  background-color: #efefef;
+}
+
+.custom-input input:disabled ~ .input-visual ~ .label-text {
+  color: #dfdfdf;
 }
 
 .accordion.active,
@@ -241,7 +292,7 @@ main #right-container #list-controls-form #order-by #sort-direction {
   display: flex;
   flex-wrap: wrap;
   justify-content: end;
-  gap: 2rem;
+  gap: 1rem;
   padding: 0 0.5rem 0.5rem 0.5rem;
 }
 
@@ -308,21 +359,28 @@ main
 }
 
 main #right-container #result-count {
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
   text-align: center;
+  font-weight: 700;
+  color: gray;
   background: gainsboro;
+  transition: all 0.2s ease-out;
 }
 
 main #right-container #result-count.success {
-  background-color: lightgreen;
+  color: var(--success-primary);
+  background-color: var(--success-bg);
 }
 
 main #right-container #result-count.loading {
-  background-color: lightyellow;
+  color: var(--loading-primary);
+  background-color: var(--loading-bg);
 }
 
 main #right-container #result-count.error {
-  background-color: lightpink;
+  color: var(--error-primary);
+  background-color: var(--error-bg);
 }
 
 main #right-container #pagination {
@@ -358,6 +416,8 @@ main #right-container #pagination #pagination-interval {
   flex: 100%;
   padding: 0.25rem;
   text-align: center;
+  font-weight: 700;
+  color: gray;
   background: gainsboro;
 }
 
