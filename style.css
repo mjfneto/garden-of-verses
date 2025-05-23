@@ -321,7 +321,7 @@ main
 
 main #right-container #list-controls-form #filter-by-author {
   min-width: 0;
-  padding: 0 0.5rem 0.5rem 0.5rem;
+  padding: 0.25rem 0.5rem 0.5rem 0.5rem;
 }
 
 main
