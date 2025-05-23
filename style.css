@@ -265,6 +265,7 @@ main #left-container #search-form label[for='poemcount'] {
 
 main #left-container #search-form button[type='submit'] {
   padding: 0.5rem;
+  font-weight: 700;
 }
 
 main #right-container {
