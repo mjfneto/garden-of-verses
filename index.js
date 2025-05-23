@@ -42,8 +42,15 @@ function onListControlsChange(event) {
 }
 
 function onPaginationClicked(event) {
-  if (event.target.tagName !== 'BUTTON') return
-  handlePagination(event)
+  const eventTarget = event.target
+
+  if (
+    eventTarget.tagName !== 'BUTTON' &&
+    eventTarget.parentElement.tagName !== 'BUTTON'
+  )
+    return
+
+  handlePagination(eventTarget.closest('button'))
   updatePoems()
 }
 
