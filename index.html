@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Meddon&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Permanent+Marker&family=Sono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Icons&family=Meddon&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Permanent+Marker&family=Sono&display=swap"
       rel="stylesheet"
     />
 
@@ -72,7 +72,11 @@
             <label class="custom-input" for="random">
               <input id="random" name="random" type="checkbox" />
               <span class="input-visual"></span>
-              <span class="label-text">Return poems randomly</span>
+              <span class="label-text flex-icon-container">
+                <span class="material-icons">&#xeb40;</span>
+                <!-- casino icon -->
+                Return poems randomly
+              </span>
             </label>
 
             <div id="number-inputs">
@@ -106,7 +110,11 @@
             </div>
           </fieldset>
 
-          <button type="submit">Search for poems</button>
+          <button class="flex-icon-container" type="submit">
+            <span class="material-icons">&#xe8b6;</span>
+            <!-- search icon -->
+            Search for poems
+          </button>
         </form>
       </section>
       <aside id="right-container" aria-label="Search filters and results">
@@ -164,7 +172,10 @@
             <legend>Filter by author</legend>
             <div id="author-filter-options">
               <div class="author-checkbox-container">
-                <label class="custom-input" for="all-author-names">
+                <label
+                  class="custom-input flex-icon-container"
+                  for="all-author-names"
+                >
                   <input
                     checked
                     type="checkbox"
@@ -173,7 +184,8 @@
                     value="All"
                   />
                   <span class="input-visual"></span>
-                  <span class="label-text">All</span>
+                  <span class="label-text material-icons">&#xeb3d;</span>
+                  <!-- all-inclusive icon -->
                 </label>
               </div>
             </div>
@@ -192,8 +204,14 @@
 
       <div class="modal-container" role="document">
         <div class="modal-controls">
-          <button type="button" id="close-modal" aria-label="Close modal">
-            ✕
+          <button
+            type="button"
+            id="close-modal"
+            class="flex-icon-container"
+            aria-label="Close modal"
+          >
+            <span class="material-icons">&#xe5cd;</span>
+            <!-- close icon -->
           </button>
         </div>
 

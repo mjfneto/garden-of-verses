@@ -61,6 +61,12 @@ button {
   color: inherit;
 }
 
+input[type='text'],
+input[type='number'],
+button[type='submit'] {
+  width: 100%;
+}
+
 input:disabled,
 button:disabled {
   cursor: not-allowed;
@@ -190,6 +196,13 @@ button:hover {
   transition: outline 0.2s ease-in-out;
 }
 
+.flex-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
 header h1 {
   margin-bottom: 1rem;
   text-align: center;
@@ -200,6 +213,10 @@ main {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+main #left-container {
+  flex-basis: 50ch;
 }
 
 main #left-container #search-form #input-field label {
@@ -221,12 +238,6 @@ main #left-container #search-form #optional-filters #number-inputs {
 
 main #left-container #search-form fieldset#input-field {
   padding: 0.25rem 0.75rem;
-}
-
-main #left-container #search-form input,
-main #left-container #search-form button[type='submit'] {
-  display: block;
-  width: 100%;
 }
 
 main #left-container #search-form #optional-filters {
@@ -318,7 +329,6 @@ main
   #filter-by-author
   #author-filter-options {
   display: flex;
-  align-items: center;
   gap: 1rem;
   overflow-x: auto;
 }
@@ -332,7 +342,7 @@ main
   position: sticky;
   left: 0;
   z-index: 1; /* important for .custom-input in the context of the author checkboxes */
-  padding: 1rem;
+  padding: 0 0.5rem 0 0;
   box-shadow: 0.5rem 0 0.5rem white;
   background-color: white;
 }
@@ -344,18 +354,6 @@ main
   #author-filter-options
   .author-checkbox-container {
   flex-shrink: 0;
-}
-
-main
-  #right-container
-  #list-controls-form
-  #filter-by-author
-  #author-filter-options
-  .author-checkbox-container
-  > * {
-  display: inline-block;
-  width: auto;
-  vertical-align: middle;
 }
 
 main #right-container #result-count {
