@@ -3,9 +3,22 @@
   padding: 0;
 }
 
-html {
+:root {
+  color: gray;
   box-sizing: border-box;
   font-size: 0.875rem;
+
+  --custom-input-primary: #0285ff;
+  --custom-input-bg: #daeeff;
+
+  --success-primary: #008000;
+  --success-bg: #ccffcc;
+
+  --loading-primary: #ffa500;
+  --loading-bg: #ffffcc;
+
+  --error-primary: #cc0000;
+  --error-bg: #ffcccc;
 }
 
 *,
@@ -24,10 +37,34 @@ body.modal-open {
   overflow: hidden;
 }
 
+::placeholder {
+  font-weight: 100;
+}
+
+fieldset {
+  border: 1px solid gainsboro;
+  border-radius: 0.25rem;
+}
+
 input,
+select {
+  border: 1px solid gainsboro;
+}
+
+input,
+select,
 button {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
   font-family: inherit;
   font-size: inherit;
+  color: inherit;
+}
+
+input[type='text'],
+input[type='number'],
+button[type='submit'] {
+  width: 100%;
 }
 
 input:disabled,
@@ -35,13 +72,82 @@ button:disabled {
   cursor: not-allowed;
 }
 
+legend {
+  font-style: italic;
+}
+
 label,
 legend {
   font-weight: 200;
 }
 
-legend {
-  font-style: italic;
+button {
+  background-color: gainsboro;
+  border: 1px solid gainsboro;
+}
+
+button:hover {
+  border: 1px solid gray;
+  color: gray;
+}
+
+.custom-input {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 0.5rem 0.75rem;
+}
+
+.custom-input input {
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+.custom-input .input-visual {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  content: '';
+  border: 1px solid gainsboro;
+  border-radius: 0.25rem;
+  transition: background-color, border-color 0.2s ease-out;
+}
+
+.custom-input .label-text {
+  color: gray;
+  font-weight: 700;
+  transition: color 0.2s ease-out;
+}
+
+.custom-input input:checked ~ .input-visual {
+  border-color: var(--custom-input-bg);
+  background-color: var(--custom-input-bg);
+}
+
+.custom-input:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+.custom-input input:checked ~ .input-visual ~ .label-text {
+  color: var(--custom-input-primary);
+}
+
+.custom-input input:disabled ~ .input-visual {
+  border-color: #dfdfdf;
+  background-color: #efefef;
+}
+
+.custom-input input:disabled ~ .input-visual ~ .label-text {
+  color: #dfdfdf;
 }
 
 .accordion.active,
@@ -90,6 +196,13 @@ legend {
   transition: outline 0.2s ease-in-out;
 }
 
+.flex-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
 header h1 {
   margin-bottom: 1rem;
   text-align: center;
@@ -102,29 +215,29 @@ main {
   gap: 1rem;
 }
 
-main #left-container #search-form fieldset + fieldset,
+main #left-container {
+  flex-basis: 50ch;
+}
+
+main #left-container #search-form #input-field label {
+  display: block;
+}
+
+main #left-container #search-form #input-field label + label {
+  margin: 0.75rem 0;
+}
+
+main #left-container #search-form #optional-filters,
 main #left-container #search-form button[type='submit'] {
   margin-top: 0.75rem;
 }
 
+main #left-container #search-form #optional-filters #number-inputs {
+  margin: 0.75rem 0;
+}
+
 main #left-container #search-form fieldset#input-field {
   padding: 0.25rem 0.75rem;
-}
-
-main #left-container #search-form label {
-  display: block;
-}
-
-main #left-container #search-form input,
-main #left-container #search-form button[type='submit'] {
-  display: block;
-  width: 100%;
-}
-
-main #left-container #search-form #input-field label,
-main #left-container #search-form label[for='random'],
-main #left-container #search-form #number-inputs {
-  margin: 0.75rem 0;
 }
 
 main #left-container #search-form #optional-filters {
@@ -152,6 +265,7 @@ main #left-container #search-form label[for='poemcount'] {
 
 main #left-container #search-form button[type='submit'] {
   padding: 0.5rem;
+  font-weight: 700;
 }
 
 main #right-container {
@@ -190,7 +304,7 @@ main #right-container #list-controls-form #order-by #sort-direction {
   display: flex;
   flex-wrap: wrap;
   justify-content: end;
-  gap: 2rem;
+  gap: 1rem;
   padding: 0 0.5rem 0.5rem 0.5rem;
 }
 
@@ -207,7 +321,7 @@ main
 
 main #right-container #list-controls-form #filter-by-author {
   min-width: 0;
-  padding: 0 0.5rem 0.5rem 0.5rem;
+  padding: 0.25rem 0.5rem 0.5rem 0.5rem;
 }
 
 main
@@ -216,7 +330,6 @@ main
   #filter-by-author
   #author-filter-options {
   display: flex;
-  align-items: center;
   gap: 1rem;
   overflow-x: auto;
 }
@@ -229,7 +342,8 @@ main
   .author-checkbox-container:first-child {
   position: sticky;
   left: 0;
-  padding: 1rem;
+  z-index: 1; /* important for .custom-input in the context of the author checkboxes */
+  padding: 0 0.5rem 0 0;
   box-shadow: 0.5rem 0 0.5rem white;
   background-color: white;
 }
@@ -243,34 +357,29 @@ main
   flex-shrink: 0;
 }
 
-main
-  #right-container
-  #list-controls-form
-  #filter-by-author
-  #author-filter-options
-  .author-checkbox-container
-  > * {
-  display: inline-block;
-  width: auto;
-  vertical-align: middle;
-}
-
 main #right-container #result-count {
-  padding: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
   text-align: center;
+  font-weight: 700;
+  color: gray;
   background: gainsboro;
+  transition: all 0.2s ease-out;
 }
 
 main #right-container #result-count.success {
-  background-color: lightgreen;
+  color: var(--success-primary);
+  background-color: var(--success-bg);
 }
 
 main #right-container #result-count.loading {
-  background-color: lightyellow;
+  color: var(--loading-primary);
+  background-color: var(--loading-bg);
 }
 
 main #right-container #result-count.error {
-  background-color: lightpink;
+  color: var(--error-primary);
+  background-color: var(--error-bg);
 }
 
 main #right-container #pagination {
@@ -305,7 +414,10 @@ main #right-container #pagination #pagination-list li button:enabled:hover {
 main #right-container #pagination #pagination-interval {
   flex: 100%;
   padding: 0.25rem;
+  border-radius: 0.25rem;
   text-align: center;
+  font-weight: 700;
+  color: gray;
   background: gainsboro;
 }
 

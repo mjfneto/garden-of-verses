@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Meddon&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Permanent+Marker&family=Sono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Material+Icons&family=Meddon&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Permanent+Marker&family=Sono&display=swap"
       rel="stylesheet"
     />
 
@@ -69,12 +69,15 @@
           <fieldset id="optional-filters">
             <legend>Optional filters</legend>
 
-            <div>
-              <label for="random">
+            <label class="custom-input" for="random">
+              <input id="random" name="random" type="checkbox" />
+              <span class="input-visual"></span>
+              <span class="label-text flex-icon-container">
+                <span class="material-icons">&#xeb40;</span>
+                <!-- casino icon -->
                 Return poems randomly
-                <input id="random" name="random" type="checkbox" />
-              </label>
-            </div>
+              </span>
+            </label>
 
             <div id="number-inputs">
               <label for="linecount">
@@ -107,7 +110,11 @@
             </div>
           </fieldset>
 
-          <button type="submit">Search for poems</button>
+          <button class="flex-icon-container" type="submit">
+            <span class="material-icons">&#xe8b6;</span>
+            <!-- search icon -->
+            Search for poems
+          </button>
         </form>
       </section>
       <aside id="right-container" aria-label="Search filters and results">
@@ -125,8 +132,8 @@
 
             <fieldset id="sort-direction">
               <legend>Sort direction:</legend>
-              <div>
-                <label for="sort-def">Default</label>
+
+              <label class="custom-input" for="sort-def">
                 <input
                   checked
                   type="radio"
@@ -134,41 +141,52 @@
                   name="sortDirection"
                   value="def"
                 />
-              </div>
+                <span class="input-visual"></span>
+                <span class="label-text">Default</span>
+              </label>
 
-              <div>
-                <label for="sort-asc">(A-Z, 0-9)</label>
+              <label class="custom-input" for="sort-asc">
                 <input
                   type="radio"
                   id="sort-asc"
                   name="sortDirection"
                   value="asc"
                 />
-              </div>
+                <span class="input-visual"></span>
+                <span class="label-text">(A-Z, 0-9)</span>
+              </label>
 
-              <div>
-                <label for="sort-desc">(Z-A, 9-0)</label>
+              <label class="custom-input" for="sort-desc">
                 <input
                   type="radio"
                   id="sort-desc"
                   name="sortDirection"
                   value="desc"
                 />
-              </div>
+                <span class="input-visual"></span>
+                <span class="label-text">(Z-A, 9-0)</span>
+              </label>
             </fieldset>
           </fieldset>
           <fieldset id="filter-by-author">
             <legend>Filter by author</legend>
             <div id="author-filter-options">
               <div class="author-checkbox-container">
-                <label for="all-author-names">All</label>
-                <input
-                  checked
-                  type="checkbox"
-                  id="all-author-names"
-                  name="authorFilter"
-                  value="All"
-                />
+                <label
+                  class="custom-input flex-icon-container"
+                  for="all-author-names"
+                >
+                  <input
+                    checked
+                    type="checkbox"
+                    id="all-author-names"
+                    name="authorFilter"
+                    value="All"
+                  />
+                  <span class="input-visual"></span>
+                  <span class="label-text material-icons">&#xeb3d;</span>
+                  <!-- all-inclusive icon -->
+                </label>
               </div>
             </div>
           </fieldset>
@@ -186,8 +204,14 @@
 
       <div class="modal-container" role="document">
         <div class="modal-controls">
-          <button type="button" id="close-modal" aria-label="Close modal">
-            ✕
+          <button
+            type="button"
+            id="close-modal"
+            class="flex-icon-container"
+            aria-label="Close modal"
+          >
+            <span class="material-icons">&#xe5cd;</span>
+            <!-- close icon -->
           </button>
         </div>
 

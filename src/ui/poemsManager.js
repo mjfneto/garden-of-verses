@@ -195,10 +195,11 @@ function insertAuthorCheckboxes() {
   let checkboxes = authors
     .map(function (author, index) {
       return `
-          <div class="author-checkbox-container">
-            <label for="author-name-${index}">${author}</label>
+          <label class="author-checkbox-container custom-input" for="author-name-${index}">
             <input checked type="checkbox" id="author-name-${index}" class="author-checkbox" name="authorFilter" value="${author}" />
-          </div>
+            <span class="input-visual"></span>
+            <span class="label-text">${author}</span>
+          </label>
         `
     })
     .join('')
@@ -211,8 +212,13 @@ function insertPaginationButtons(pages) {
   previousButton.type = 'button'
   previousButton.dataset.page = 'previous'
   previousButton.ariaLabel = 'Previous page'
-  previousButton.classList.add('pagination-button')
-  previousButton.textContent = '\u2039' // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+  previousButton.classList.add('pagination-button', 'flex-icon-container')
+
+  let navigateBeforeIcon = document.createElement('span')
+  navigateBeforeIcon.classList.add('material-icons')
+  navigateBeforeIcon.innerHTML = '&#xe408;'
+
+  previousButton.appendChild(navigateBeforeIcon)
 
   pagination.appendChild(previousButton)
 
@@ -242,8 +248,13 @@ function insertPaginationButtons(pages) {
   nextButton.type = 'button'
   nextButton.dataset.page = 'next'
   nextButton.ariaLabel = 'Next page'
-  nextButton.classList.add('pagination-button')
-  nextButton.textContent = '\u203a' // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+  nextButton.classList.add('pagination-button', 'flex-icon-container')
+
+  let navigateNextIcon = document.createElement('span')
+  navigateNextIcon.classList.add('material-icons')
+  navigateNextIcon.innerHTML = '&#xe409;'
+
+  nextButton.appendChild(navigateNextIcon)
 
   const { currentPage, pageSize } = state
 
@@ -281,9 +292,7 @@ export function handleCheckboxes(event) {
   }
 }
 
-export function handlePagination(event) {
-  const button = event.target
-
+export function handlePagination(button) {
   const { page } = button.dataset
   const { totalPages } = state
 
