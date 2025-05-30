@@ -4,9 +4,16 @@
 }
 
 :root {
-  color: gray;
   box-sizing: border-box;
   font-size: 0.875rem;
+
+  --neutral-gray: #4d5a68;
+  --neutral-gray-light: #e5e9f0;
+
+  --vintage-red: #a11d33;
+  --dark-red: #8b0000;
+  --firebrick: #b22222;
+  --modern-vermilion: #9e1b32;
 
   --custom-input-primary: #0285ff;
   --custom-input-bg: #daeeff;
@@ -19,6 +26,8 @@
 
   --error-primary: #cc0000;
   --error-bg: #ffcccc;
+
+  color: var(--neutral-gray);
 }
 
 *,
@@ -582,6 +591,7 @@ main #right-container #search-results ol li .lines-peek span {
   padding: 1rem;
   font-size: 1.25rem;
   font-family: 'Meddon', cursive;
+  color: var(--firebrick);
 }
 
 .modal .modal-container .modal-body .poem-info .poem-linecount {
