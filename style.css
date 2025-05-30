@@ -244,11 +244,8 @@ main #left-container #search-form #optional-filters {
   padding: 0.25rem 0.75rem;
 }
 
-main #left-container #search-form #optional-filters #random {
-  display: inline;
-  width: auto;
-  margin: 0;
-  vertical-align: middle;
+main #left-container #search-form #optional-filters label[for='random'] {
+  width: 100%;
 }
 
 main #left-container #search-form #number-inputs {
