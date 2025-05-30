@@ -305,15 +305,9 @@ main #right-container #list-controls-form #order-by #sort-direction {
   padding: 0 0.5rem 0.5rem 0.5rem;
 }
 
-main #right-container #list-controls-form #order-by #sort-direction label,
-main
-  #right-container
-  #list-controls-form
-  #order-by
-  #sort-direction
-  input[type='radio'] {
-  display: inline;
-  width: auto;
+main #right-container #list-controls-form #order-by #sort-direction label {
+  flex: 1 0 auto;
+  text-align: center;
 }
 
 main #right-container #list-controls-form #filter-by-author {
